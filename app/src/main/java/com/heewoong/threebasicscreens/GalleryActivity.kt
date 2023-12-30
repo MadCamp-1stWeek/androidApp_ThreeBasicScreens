@@ -1,10 +1,13 @@
 package com.heewoong.threebasicscreens
 
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.constraintlayout.motion.widget.OnSwipe
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 
 class GalleryActivity : AppCompatActivity() {
 //    private fun setImage(getData: String, colorImage: ImageView) {
@@ -75,14 +78,20 @@ class GalleryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery1)
 
-        var getData = intent.getIntExtra("data", 0)
+        val path = intent.getStringExtra("path")
+        val name = intent.getStringExtra("name")
         val colorImage = findViewById<ImageView>(R.id.imageArea)
 
-        if (getData != null && getData != 0) {
-            colorImage.setImageResource(getData)
-        }
+        supportActionBar?.setTitle(name)
+        Glide.with(this).load(path).apply(RequestOptions().error(R.drawable.c_1)).into(colorImage)
+//        val bm = BitmapFactory.decodeFile(path)
+//        colorImage.setImageBitmap(bm)
 
-//        colorImage.setOnTouchListener(object: OnSwipeTouchListener(this@GalleryActivity) {
+//        if (getData != null && getData != 0) {
+//            colorImage.setImageResource(getData)
+//        }
+
+        colorImage.setOnTouchListener(object: OnSwipeTouchListener(this@GalleryActivity) {
 //            override fun onSwipeRight() {
 //                super.onSwipeLeft()
 //                if (getData != "1" && getData != null) {
@@ -100,16 +109,16 @@ class GalleryActivity : AppCompatActivity() {
 //                getData?.let { setImage(it, colorImage) }
 //            }
 //
-//            override fun onSwipeUp() {
-//                super.onSwipeUp()
-//                finish()
-//            }
-//
-//            override fun onSwipeDown() {
-//                super.onSwipeDown()
-//                finish()
-//            }
-//        })
+            override fun onSwipeUp() {
+                super.onSwipeUp()
+                finish()
+            }
+
+            override fun onSwipeDown() {
+                super.onSwipeDown()
+                finish()
+            }
+        })
 
 
 
