@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_contact">
+
+    <fragment
+        android:id="@+id/navigation_contact"
+        android:name="com.heewoong.threebasicscreens.ui.contact.contactFragment"
+        android:label="Contact"
+        tools:layout="@layout/fragment_contact" />
+
+    <fragment
+        android:id="@+id/navigation_photo"
+        android:name="com.heewoong.threebasicscreens.ui.photo.photoFragment"
+        android:label="Photo"
+        tools:layout="@layout/fragment_photo" />
+
+    <fragment
+        android:id="@+id/navigation_free"
+        android:name="com.heewoong.threebasicscreens.ui.free.freeFragment"
+        android:label="Free"
+        tools:layout="@layout/fragment_free" />
+</navigation>

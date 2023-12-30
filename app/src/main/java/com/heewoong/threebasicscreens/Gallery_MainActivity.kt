@@ -1,5 +1,6 @@
 package com.heewoong.threebasicscreens
 
+<<<<<<< HEAD
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,14 +11,30 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 
-class MainActivity : AppCompatActivity() {
+class Gallery_MainActivity : AppCompatActivity() {
 
     private var imageRecycler: RecyclerView?=null
     private var images: ArrayList<Image>?=null
+=======
+import android.os.Bundle
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.heewoong.threebasicscreens.databinding.ActivityMainBinding
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
+>>>>>>> 16b203529733541c3bbd7146e8d1c32a22adb13d
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+<<<<<<< HEAD
+        setContentView(R.layout.gallery_activity_main)
 
 //        val images = listOf(
 //            Image(R.drawable.c_1),
@@ -201,5 +218,23 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
         }
         return imagelist
+=======
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val navView: BottomNavigationView = binding.navView
+
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_contact, R.id.navigation_photo, R.id.navigation_free
+            )
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
+>>>>>>> 16b203529733541c3bbd7146e8d1c32a22adb13d
     }
 }
