@@ -1,0 +1,23 @@
+{
+  "contacts":
+    [
+      {
+        "image_info" : "c_1",
+        "name_info" : "Patrick",
+        "tel_info" : "010-1111-1111",
+        "memo_info" : "best friend"
+      },
+      {
+        "image_info" : "c_2",
+        "name_info" : "John",
+        "tel_info" : "010-2222-2222",
+        "memo_info" : "brother"
+      },
+      {
+        "image_info" : "c_3",
+        "name_info" : "Tony",
+        "tel_info" : "010-3333-3333",
+        "memo_info" : "neighbor"
+      }
+    ]
+  }
