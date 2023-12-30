@@ -11,32 +11,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val images = listOf(
-            Image(R.drawable.c_1),
-            Image(R.drawable.c_1_2),
-            Image(R.drawable.c_2),
-            Image(R.drawable.c_3),
-            Image(R.drawable.c_4),
-            Image(R.drawable.c_5),
-            Image(R.drawable.c_5_2),
-            Image(R.drawable.c_6),
-            Image(R.drawable.c_7),
-            Image(R.drawable.c_7_1),
-            Image(R.drawable.c_7_2),
-            Image(R.drawable.c_7_3),
-            Image(R.drawable.c_7_4),
-            Image(R.drawable.c_8),
-            Image(R.drawable.c_9),
-            Image(R.drawable.c_10),
-            Image(R.drawable.c_11),
-            Image(R.drawable.c_12),
-            Image(R.drawable.c_13),
-            Image(R.drawable.c_14)
+        val contacts = listOf(
+            Contact(R.drawable.c_1, "Patrick Star", "010-1212-1212", "Best Friend"),
+            Contact(R.drawable.c_1_2, "Squidward", "010-2323-2323", "Mean"),
+            Contact(R.drawable.c_2, "Mr.Krabs", "010-3434-3434", "Boss"),
+            Contact(R.drawable.c_3, "Plankton", "010-4545-4545", "Villain"),
+            Contact(R.drawable.c_4, "Sandy Cheeks", "010-5656-5656", "Friend"),
+            Contact(R.drawable.c_5, "Gary", "010-6767-6767", "My everything")
             )
 
-        val recyclerView = findViewById<RecyclerView>(R.id.image_recycler)
+        val recyclerView = findViewById<RecyclerView>(R.id.contact_recycler)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = ImageAdapter(this, images)
+        recyclerView.adapter = ContactAdapter(this, contacts)
     }
 }
