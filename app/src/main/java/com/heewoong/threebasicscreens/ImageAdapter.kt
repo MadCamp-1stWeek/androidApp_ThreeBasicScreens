@@ -57,8 +57,6 @@ class ImageAdapter(
         }
         holder.img?.setOnClickListener {
             val intent= Intent(context, GalleryActivity::class.java)
-            intent.putExtra("path", image.imageSrc)
-            intent.putExtra("name", image.imageName)
             intent.putExtra("position", position)
             intent.putExtra("paths", images.map { it.imageSrc }.toTypedArray())
             intent.putExtra("names", images.map { it.imageName }.toTypedArray())

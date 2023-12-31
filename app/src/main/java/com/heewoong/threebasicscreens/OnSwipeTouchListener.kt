@@ -78,9 +78,9 @@ OnTouchListener {
     open fun onSwipeLeft() {}
     open fun onSwipeUp() {}
     open fun onSwipeDown() {}
-    private fun onClick() {}
+    open fun onClick() {}
     private fun onDoubleClick() {}
-    private fun onLongClick() {}
+    open fun onLongClick() {}
     init {
         gestureDetector = GestureDetector(value, GestureListener())
     }

@@ -4,14 +4,19 @@ import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.motion.widget.OnSwipe
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import java.io.File
 
 class GalleryActivity : AppCompatActivity() {
+
+    var isActionBarHidden = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery1)
@@ -20,8 +25,8 @@ class GalleryActivity : AppCompatActivity() {
 
         var position = intent.getIntExtra("position", 0)
 
-        val path = intent.getStringExtra("path")
-        val name = intent.getStringExtra("name")
+        val path = paths[position]
+        val name = names[position]
 
         val colorImage = findViewById<ImageView>(R.id.imageArea)
 
@@ -44,7 +49,7 @@ class GalleryActivity : AppCompatActivity() {
 
             override fun onSwipeLeft() {
                 super.onSwipeRight()
-                if (position < 20) {
+                if (position < paths.size) {
                     position += 1
                     loadImage(paths[position], names[position], colorImage)
                 }
@@ -59,12 +64,55 @@ class GalleryActivity : AppCompatActivity() {
                 super.onSwipeDown()
                 finish()
             }
+
+            override fun onClick() {
+                super.onClick()
+                if (isActionBarHidden) {
+                    supportActionBar?.show()
+                } else {
+                    supportActionBar?.hide()
+                }
+                isActionBarHidden = !isActionBarHidden
+            }
+
+            override fun onLongClick() {
+                super.onLongClick()
+                val builder = AlertDialog.Builder(this@GalleryActivity)
+                builder.setTitle("Confirm Deletion")
+                    .setMessage("Are you sure you want to delete this image?")
+                    .setPositiveButton("Delete") { _, _ ->
+                        // User clicked the Delete button
+                        if (position < paths.size) {
+                            val filePath = "file://" + paths[position]
+
+                            // Check if the file exists
+                            val imageToDelete = File(paths[position])
+                            if (imageToDelete.exists()) {
+                                if (imageToDelete.delete()) {
+
+                                    Toast.makeText(this@GalleryActivity, "Image deleted", Toast.LENGTH_SHORT).show()
+
+                                    // Optionally, you can refresh the gallery or update the imagePaths list
+                                    // and load the next image
+                                    finish()
+                                } else {
+                                    Toast.makeText(this@GalleryActivity, "Failed to delete image", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
+            }
         })
 
     }
 
     fun loadImage(path: String?, name: String?, colorImage: ImageView) {
         supportActionBar?.setTitle(name)
+        supportActionBar?.show()
+        isActionBarHidden = false
+
         val filePath = "file://" + path
 
         // Check if the file exists
