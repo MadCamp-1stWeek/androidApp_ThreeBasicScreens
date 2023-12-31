@@ -2,7 +2,6 @@ package com.heewoong.threebasicscreens
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +21,7 @@ class ImageAdapter(
         var img : ImageView?=null
 
         init {
-            img = View?.findViewById<ImageView>(R.id.image)
+            img = View.findViewById<ImageView>(R.id.image)
         }
 
 //        fun bindView(context: Context, image: Image) {
@@ -60,6 +59,9 @@ class ImageAdapter(
             val intent= Intent(context, GalleryActivity::class.java)
             intent.putExtra("path", image.imageSrc)
             intent.putExtra("name", image.imageName)
+            intent.putExtra("position", position)
+            intent.putExtra("paths", images.map { it.imageSrc }.toTypedArray())
+            intent.putExtra("names", images.map { it.imageName }.toTypedArray())
             context.startActivity(intent)
         }
 

@@ -3,87 +3,29 @@ package com.heewoong.threebasicscreens
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.constraintlayout.motion.widget.OnSwipe
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import java.io.File
 
 class GalleryActivity : AppCompatActivity() {
-//    private fun setImage(getData: String, colorImage: ImageView) {
-//        when (getData) {
-//            "1" -> {
-//                colorImage.setImageResource(R.drawable.c_1)
-//            }
-//            "2" -> {
-//                colorImage.setImageResource(R.drawable.c_1_2)
-//            }
-//            "3" -> {
-//                colorImage.setImageResource(R.drawable.c_2)
-//            }
-//            "4" -> {
-//                colorImage.setImageResource(R.drawable.c_3)
-//            }
-//            "5" -> {
-//                colorImage.setImageResource(R.drawable.c_4)
-//            }
-//            "6" -> {
-//                colorImage.setImageResource(R.drawable.c_5)
-//            }
-//            "7" -> {
-//                colorImage.setImageResource(R.drawable.c_5_2)
-//            }
-//            "8" -> {
-//                colorImage.setImageResource(R.drawable.c_6)
-//            }
-//            "9" -> {
-//                colorImage.setImageResource(R.drawable.c_7)
-//            }
-//            "10" -> {
-//                colorImage.setImageResource(R.drawable.c_7_1)
-//            }
-//            "11" -> {
-//                colorImage.setImageResource(R.drawable.c_7_2)
-//            }
-//            "12" -> {
-//                colorImage.setImageResource(R.drawable.c_7_3)
-//            }
-//            "13" -> {
-//                colorImage.setImageResource(R.drawable.c_7_4)
-//            }
-//            "14" -> {
-//                colorImage.setImageResource(R.drawable.c_8)
-//            }
-//            "15" -> {
-//                colorImage.setImageResource(R.drawable.c_9)
-//            }
-//            "16" -> {
-//                colorImage.setImageResource(R.drawable.c_10)
-//            }
-//            "17" -> {
-//                colorImage.setImageResource(R.drawable.c_11)
-//            }
-//            "18" -> {
-//                colorImage.setImageResource(R.drawable.c_12)
-//            }
-//            "19" -> {
-//                colorImage.setImageResource(R.drawable.c_13)
-//            }
-//            "20" -> {
-//                colorImage.setImageResource(R.drawable.c_14)
-//            }
-//        }
-//    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery1)
+        val paths = intent.getStringArrayExtra("paths") ?: emptyArray()
+        val names = intent.getStringArrayExtra("names") ?: emptyArray()
+
+        var position = intent.getIntExtra("position", 0)
 
         val path = intent.getStringExtra("path")
         val name = intent.getStringExtra("name")
+
         val colorImage = findViewById<ImageView>(R.id.imageArea)
 
-        supportActionBar?.setTitle(name)
-        Glide.with(this).load(path).apply(RequestOptions().error(R.drawable.c_1)).into(colorImage)
+        loadImage(path, name, colorImage)
 //        val bm = BitmapFactory.decodeFile(path)
 //        colorImage.setImageBitmap(bm)
 
@@ -92,23 +34,22 @@ class GalleryActivity : AppCompatActivity() {
 //        }
 
         colorImage.setOnTouchListener(object: OnSwipeTouchListener(this@GalleryActivity) {
-//            override fun onSwipeRight() {
-//                super.onSwipeLeft()
-//                if (getData != "1" && getData != null) {
-//                    getData = (getData!!.toInt() - 1).toString()
-//                }
-//                Toast.makeText(this@GalleryActivity, "right", Toast.LENGTH_LONG).show()
-//                getData?.let { setImage(it, colorImage) }
-//            }
-//
-//            override fun onSwipeLeft() {
-//                super.onSwipeRight()
-//                if (getData != "20" && getData != null) {
-//                    getData = (getData!!.toInt() + 1).toString()
-//                }
-//                getData?.let { setImage(it, colorImage) }
-//            }
-//
+            override fun onSwipeRight() {
+                super.onSwipeLeft()
+                if (position > 0) {
+                    position -= 1
+                    loadImage(paths[position], names[position], colorImage)
+                }
+            }
+
+            override fun onSwipeLeft() {
+                super.onSwipeRight()
+                if (position < 20) {
+                    position += 1
+                    loadImage(paths[position], names[position], colorImage)
+                }
+            }
+
             override fun onSwipeUp() {
                 super.onSwipeUp()
                 finish()
@@ -120,9 +61,23 @@ class GalleryActivity : AppCompatActivity() {
             }
         })
 
+    }
 
+    fun loadImage(path: String?, name: String?, colorImage: ImageView) {
+        supportActionBar?.setTitle(name)
+        val filePath = "file://" + path
 
-
-
+        // Check if the file exists
+        val file = File(path)
+        if (file.exists()) {
+            // File exists, proceed with loading
+            Glide.with(this).load(file).error(R.drawable.c_1).into(colorImage)
+            Log.e("ImageAdapter", "File found: $filePath" )
+        } else {
+            // Log an error if the file doesn't exist
+            Log.e("ImageAdapter", "File not found: $filePath")
+            // Optionally, you can load a placeholder image or handle this case differently
+            Glide.with(this).load(R.drawable.c_10).into(colorImage)
+        }
     }
 }
