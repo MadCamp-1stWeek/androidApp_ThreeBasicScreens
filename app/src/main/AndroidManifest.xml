@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET" />
-a
+
 
     <application
         android:allowBackup="true"
@@ -20,7 +20,7 @@ a
             android:exported="false"
             android:grantUriPermissions="true"/>
         <activity
-            android:name=".Gallery_MainActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

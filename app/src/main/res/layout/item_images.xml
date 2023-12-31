@@ -21,7 +21,7 @@
                 android:layout_height="120dp"
                 android:id="@+id/image"
                 android:scaleType="fitXY"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/c_3" />
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
