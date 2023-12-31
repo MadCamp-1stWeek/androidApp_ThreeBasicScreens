@@ -1,5 +1,6 @@
 package com.heewoong.threebasicscreens.ui.photo
 
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.Application
 import android.content.Intent
@@ -88,10 +89,15 @@ class photoFragment :Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == 102 && resultCode == RESULT_OK) {
             saveImageToStorage(data)
         }
+    }
+    override fun onResume() {
+        super.onResume()
+
+        // Load images whenever the fragment is resumed
+        galleryViewModel.loadImages(requireContext().applicationContext as Application)
     }
 
     fun saveImageToStorage(data: Intent?) {
@@ -130,8 +136,6 @@ class photoFragment :Fragment() {
                 override fun onScanCompleted(path: String?, uri: Uri?) {
                     Log.d("MediaScanner", "Scanned $path:")
                     Log.d("MediaScanner", "-> uri=$uri")
-
-                    galleryViewModel.loadImages(requireContext().applicationContext as Application)
                 }
             }
         )

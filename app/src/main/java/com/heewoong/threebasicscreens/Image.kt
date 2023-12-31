@@ -1,5 +1,7 @@
 package com.heewoong.threebasicscreens
 
+import android.os.Parcel
+import android.os.Parcelable
 import java.io.Serializable
 
 class Image {
