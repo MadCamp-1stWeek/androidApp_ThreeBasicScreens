@@ -48,7 +48,7 @@ class ImageAdapter(
         val file = File(image.imageSrc)
         if (file.exists()) {
             // File exists, proceed with loading
-            Glide.with(context).load(filePath).error(R.drawable.c_1).into(holder.img!!)
+            Glide.with(context).load(file).error(R.drawable.c_1).into(holder.img!!)
             Log.e("ImageAdapter", "File found: $filePath" )
         } else {
             // Log an error if the file doesn't exist
