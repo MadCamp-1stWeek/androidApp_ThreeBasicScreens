@@ -1,8 +1,13 @@
 package com.heewoong.threebasicscreens.ui.contact
 
 import android.app.Application
+import android.content.ContentProviderOperation
+import android.content.Intent
+import android.content.OperationApplicationException
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.RemoteException
+import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,13 +19,17 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.heewoong.threebasicscreens.ContactAdapter
 import com.heewoong.threebasicscreens.R
+import com.heewoong.threebasicscreens.contactAdd
+import com.heewoong.threebasicscreens.contactDescription
 import kotlinx.coroutines.launch
 
 
@@ -39,8 +48,16 @@ class contactFragment : Fragment() {
 
         checkAndRequestPermissions()
         val root = inflater.inflate(R.layout.fragment_contact, container, false)
+        val fab: FloatingActionButton? = root.findViewById(R.id.fab)
+
 
         viewModel = ViewModelProvider(this).get(contactViewModel::class.java)
+
+        fab?.setOnClickListener {
+            val intent = Intent(requireContext(), contactAdd::class.java)
+            requireContext().startActivity(intent)
+//            viewModel.contactAdd(requireContext().applicationContext as Application)
+        }
 
         recyclerView = root.findViewById(R.id.contact_recycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -64,22 +81,37 @@ class contactFragment : Fragment() {
 
         viewModel.updateContactList(requireContext().applicationContext as Application)
 
-
-
-
-
-
         return root
     }
-
+    override fun onResume() {
+        super.onResume()
+        viewModel.updateContactList(requireContext().applicationContext as Application)
+    }
     private fun checkAndRequestPermissions() {
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.READ_CONTACTS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        val readContactsPermission = android.Manifest.permission.READ_CONTACTS
+        val writeContactsPermission = android.Manifest.permission.WRITE_CONTACTS
+
+        val readPermissionGranted = ContextCompat.checkSelfPermission(
+            requireContext(),
+            readContactsPermission
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val writePermissionGranted = ContextCompat.checkSelfPermission(
+            requireContext(),
+            writeContactsPermission
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val permissionsToRequest = mutableListOf<String>()
+        if (!readPermissionGranted) {
+            permissionsToRequest.add(readContactsPermission)
+        }
+        if (!writePermissionGranted) {
+            permissionsToRequest.add(writeContactsPermission)
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
             requestPermissions(
-                arrayOf(android.Manifest.permission.READ_CONTACTS),
+                permissionsToRequest.toTypedArray(),
                 100
             )
         } else {
@@ -88,6 +120,7 @@ class contactFragment : Fragment() {
         }
     }
 
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -95,15 +128,58 @@ class contactFragment : Fragment() {
     ) {
         when (requestCode) {
             100 -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("test", "Permission granted")
-                    // 권한이 허용된 경우에 할 일을 처리하세요
-                    // 예를 들어, 연락처 가져오기 등의 작업을 진행할 수 있습니다.
-                } else {
-                    Log.d("test", "Permission denied")
+                val grantedPermissions = mutableListOf<String>()
+                val deniedPermissions = mutableListOf<String>()
+                grantResults.forEachIndexed { index, result ->
+                    if (result == PackageManager.PERMISSION_GRANTED) {
+                        grantedPermissions.add(permissions[index])
+                    } else {
+                        deniedPermissions.add(permissions[index])
+                    }
+                }
+                if (grantedPermissions.isNotEmpty()) {
+                    // 필요한 작업을 처리하세요 (예: 연락처 추가 등)
+                }
+                if (deniedPermissions.isNotEmpty()) {
                     // 권한이 거부된 경우 사용자에게 메시지를 표시하거나 다른 처리를 수행하세요
                 }
             }
         }
     }
+
+//    private fun checkAndRequestPermissions() {
+//        if (ContextCompat.checkSelfPermission(
+//                requireContext(),
+//                android.Manifest.permission.READ_CONTACTS
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            requestPermissions(
+//                arrayOf(android.Manifest.permission.READ_CONTACTS),
+//                100
+//            )
+//        } else {
+//            // 이미 권한이 허용된 경우의 처리
+//            Log.d("test", "Permission already granted")
+//        }
+//    }
+//
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        when (requestCode) {
+//            100 -> {
+//                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    Log.d("test", "Permission granted")
+//                    // 권한이 허용된 경우에 할 일을 처리하세요
+//                    // 예를 들어, 연락처 가져오기 등의 작업을 진행할 수 있습니다.
+//                } else {
+//                    Log.d("test", "Permission denied")
+//                    // 권한이 거부된 경우 사용자에게 메시지를 표시하거나 다른 처리를 수행하세요
+//                }
+//            }
+//        }
+//    }
+
 }
