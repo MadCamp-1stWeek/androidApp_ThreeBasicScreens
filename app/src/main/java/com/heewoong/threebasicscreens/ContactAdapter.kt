@@ -45,7 +45,7 @@ class ContactAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder =
-        ImageViewHolder(LayoutInflater.from(context).inflate(R.layout.item_images, parent,false))
+        ImageViewHolder(LayoutInflater.from(context).inflate(R.layout.item_contacts, parent,false))
 
     override fun getItemCount(): Int = contacts.size
 
