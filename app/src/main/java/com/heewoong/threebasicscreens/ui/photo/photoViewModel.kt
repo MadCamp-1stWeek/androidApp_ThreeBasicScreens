@@ -1,0 +1,13 @@
+package com.heewoong.threebasicscreens.ui.photo
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+
+class photoViewModel : ViewModel() {
+    private val _text = MutableLiveData<String>().apply {
+        value = "This is photo Fragment"
+    }
+    val text: LiveData<String> = _text
+
+}

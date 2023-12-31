@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_contact"
+        android:icon="@drawable/ic_baseline_contact_24"
+        android:title="Contact" />
+
+    <item
+        android:id="@+id/navigation_photo"
+        android:icon="@drawable/ic_baseline_photo_24"
+        android:title="Photo" />
+
+    <item
+        android:id="@+id/navigation_free"
+        android:icon="@drawable/ic_baseline_free_24"
+        android:title="Free" />
+</menu>
