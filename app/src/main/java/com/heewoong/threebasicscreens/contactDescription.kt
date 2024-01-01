@@ -10,6 +10,7 @@ import android.widget.TextView
 class contactDescription : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.hide()
         setContentView(R.layout.activity_contact_description)
 
         val imageIn = findViewById<ImageView>(R.id.imageIn)
