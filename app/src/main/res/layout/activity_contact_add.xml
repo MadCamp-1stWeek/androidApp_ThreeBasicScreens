@@ -12,6 +12,7 @@
         android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:cardCornerRadius= "40dp"
@@ -37,7 +38,7 @@
                         android:layout_width="150dp"
                         android:layout_height="150dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/c_3"
+                        android:src="@drawable/ic_baseline_add"
                         />
                 </androidx.cardview.widget.CardView>
                 <EditText
@@ -50,6 +51,7 @@
                     android:textColor="@color/black"
                     android:layout_gravity="center">
                 </EditText>
+
 
                 <EditText
                     android:id="@+id/telAdd"
@@ -74,5 +76,8 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

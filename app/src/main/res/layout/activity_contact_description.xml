@@ -60,6 +60,29 @@
                     android:textSize="20dp"
                     android:textColor="@color/gray"
                     android:text="TextView" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="30dp">
+
+                    <Button
+                        android:id="@+id/del"
+                        android:layout_width="70dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp"
+                        android:text="삭제" />
+
+                    <Button
+                        android:id="@+id/edit"
+                        android:layout_width="70dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="20dp"
+                        android:text="수정" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
 
@@ -67,3 +90,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
