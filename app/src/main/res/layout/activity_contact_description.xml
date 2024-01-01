@@ -16,17 +16,16 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            app:cardCornerRadius= "50dp"
             android:layout_gravity="center"
-            android:clipToPadding="false">
+            android:layout_marginTop="100dp"
+            android:clipToPadding="false"
+            app:cardCornerRadius="50dp">
 
             <ImageView
                 android:id="@+id/imageIn"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:layout_gravity="center"
-                 />
+                android:layout_gravity="center" />
         </androidx.cardview.widget.CardView>
 
         <TextView
@@ -35,18 +34,41 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
+            android:text="TextView"
             android:textSize="30dp"
-            android:textStyle="bold"
-            android:text="TextView" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/telIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_gravity="center"
-            android:textSize="20dp"
-            android:text="TextView" />
+            android:layout_marginTop="20dp"
+            android:text="TextView"
+            android:textSize="20dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp">
+
+            <Button
+                android:id="@+id/del"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:text="삭제" />
+
+            <Button
+                android:id="@+id/edit"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:text="수정" />
+
+        </LinearLayout>
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

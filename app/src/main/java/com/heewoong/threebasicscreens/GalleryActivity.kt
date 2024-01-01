@@ -1,5 +1,7 @@
 package com.heewoong.threebasicscreens
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,6 +22,9 @@ class GalleryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery1)
+
+        var contactFlag =intent.getBooleanExtra("contactFlag", false)
+
         val paths = intent.getStringArrayExtra("paths") ?: emptyArray()
         val names = intent.getStringArrayExtra("names") ?: emptyArray()
 
@@ -73,6 +78,20 @@ class GalleryActivity : AppCompatActivity() {
                     supportActionBar?.hide()
                 }
                 isActionBarHidden = !isActionBarHidden
+
+                if (contactFlag==true){
+                    Toast.makeText(this@GalleryActivity, "저장되었습니다.", Toast.LENGTH_LONG).show()
+                    val intent = Intent("imageSend")
+                    intent.putExtra("imageUri", "file://$path")
+                    intent.putExtra("fileInfo", "$path")
+//                    intent.putExtra("Done", "Yes")
+//                    setResult(Activity.RESULT_OK, intent)
+                    sendBroadcast(intent)
+                    finish()
+                }
+                else{
+
+                }
             }
 
             override fun onLongClick() {
