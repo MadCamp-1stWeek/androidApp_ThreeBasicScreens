@@ -16,6 +16,7 @@ import com.heewoong.threebasicscreens.ui.contact.contactViewModel
 class contactDescription : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.hide()
         setContentView(R.layout.activity_contact_description)
 
         val contactViewModel: contactViewModel by viewModels()
