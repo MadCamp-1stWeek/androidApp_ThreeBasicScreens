@@ -81,7 +81,7 @@ OnTouchListener {
     open fun onSwipeDown() {}
     open fun onClick() {}
     private fun onDoubleClick() {}
-    open fun onLongClick() {}
+    private fun onLongClick() {}
     init {
         gestureDetector = GestureDetector(value, GestureListener())
     }
@@ -158,7 +158,7 @@ internal open class OnSwipeTouchListener_game(value: FragmentActivity) :
     open fun onSwipeDown() {}
     private fun onClick() {}
     private fun onDoubleClick() {}
-    open fun onLongClick() {}
+    private fun onLongClick() {}
     init {
         gestureDetector = GestureDetector(value, GestureListener())
     }
