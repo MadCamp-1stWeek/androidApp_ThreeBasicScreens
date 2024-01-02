@@ -80,6 +80,9 @@ class photoFragment(contactFlag:Boolean=false) :Fragment() {
                 101
             )
         }
+        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),103)
+        }
 
         // Initialize ViewModel
         galleryViewModel = ViewModelProvider(this).get(photoViewModel::class.java)
@@ -98,9 +101,7 @@ class photoFragment(contactFlag:Boolean=false) :Fragment() {
             if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CAMERA),102)
             }
-            if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),103)
-            }
+
             val cameraInt = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             startActivityForResult(cameraInt, 102)
         }
