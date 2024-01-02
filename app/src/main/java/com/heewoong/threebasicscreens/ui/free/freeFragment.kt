@@ -1,6 +1,7 @@
 package com.heewoong.threebasicscreens.ui.free
 
-import android.content.DialogInterface
+import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -11,6 +12,7 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -26,6 +28,7 @@ class freeFragment :Fragment()  {
     private lateinit var surfaceView: SurfaceView
     private lateinit var currentScore: TextView
     private lateinit var bestScore: TextView
+    private lateinit var startButton: Button
 
     private lateinit var surfaceHolder: SurfaceHolder
     private var bestScorevalue: Int = 0
@@ -36,17 +39,15 @@ class freeFragment :Fragment()  {
     private var positionX: Int = 0
     private var positionY: Int = 0
 
-
-
     private val pointSize: Int = 30
-    private val defaultTalePoints = 3;
+    private val defaultTalePoints = 3
     private val snakeColor = Color.MAGENTA
     private val snakeMovingSpeed = 800
-    private lateinit var timer: Timer
+    private var timer: Timer = Timer()
 
-    private var canvas: Canvas? = null
     private var pointColor: Paint? = null
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,8 +59,10 @@ class freeFragment :Fragment()  {
         surfaceView = view.findViewById(R.id.surfaceView)
         currentScore = view.findViewById(R.id.current_score)
         bestScore = view.findViewById(R.id.best_score)
+        startButton = view.findViewById(R.id.startButton)
 
         surfaceHolder = surfaceView.holder
+
         bestScorevalue = bestScore.text.toString().substringAfter(": ").trim().toIntOrNull() ?: 0
 
         surfaceHolder.addCallback(SurfaceCallback())
@@ -93,16 +96,34 @@ class freeFragment :Fragment()  {
                 }
             }
         })
-
         return view
+    }
+    override fun onDetach() {
+        super.onDetach()
+        timer.cancel()
+        timer.purge()
+        startButton.visibility = View.VISIBLE
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startButton.visibility = View.VISIBLE
     }
 
     inner class SurfaceCallback : SurfaceHolder.Callback {
+        @SuppressLint("SetTextI18n")
         override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
             // Surface의 상태가 변경되었을 때 호출되는 메서드
+            bestScorevalue = getBestScore()
+            bestScore.text = "Best Score: $bestScorevalue"
             surfaceHolder = holder
-            init()
+            startButton.setOnClickListener {
+                startgame()
+                startButton.visibility = View.GONE
+            }
         }
+
+        fun startgame() {init()}
 
         override fun surfaceCreated(holder: SurfaceHolder) {
             // Surface가 처음으로 생성되었을 때 호출되는 메서드
@@ -111,8 +132,24 @@ class freeFragment :Fragment()  {
         override fun surfaceDestroyed(holder: SurfaceHolder) {
             // Surface가 소멸되었을 때 호출되는 메서드
         }
+        private fun getBestScore(): Int {
+            val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+            return sharedPreferences.getInt("best_score", 0)
+        }
 
+        private fun saveBestScore(score: Int) {
+            val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putInt("best_score", score)
+            editor.apply()
+        }
+        @SuppressLint("SetTextI18n")
         private fun init() {
+
+            startButton.visibility = View.GONE
+            bestScorevalue = getBestScore()
+            bestScore.text = "Best Score: $bestScorevalue"
+
             //clear snake points
             snakePointsList = ArrayList<SnakePoints>()
             currentScore.setText("0")
@@ -123,7 +160,7 @@ class freeFragment :Fragment()  {
             var startPositionX = (pointSize) * defaultTalePoints
 
             for (i in 0..defaultTalePoints) {
-                var snakePoint = SnakePoints(startPositionX, pointSize)
+                val snakePoint = SnakePoints(startPositionX, pointSize)
                 (snakePointsList as ArrayList<SnakePoints>).add(snakePoint)
 
                 //Increase value for next point
@@ -160,7 +197,8 @@ class freeFragment :Fragment()  {
 
             timer = Timer()
             timer.scheduleAtFixedRate(object: TimerTask() {
-                override public fun run() {
+                @SuppressLint("SetTextI18n")
+                override fun run() {
                     var headPositionX = snakePointsList.get(0).getPositionX()
                     var headPositionY = snakePointsList.get(0).getPositionY()
 
@@ -199,14 +237,16 @@ class freeFragment :Fragment()  {
                         builder.setMessage("Your score:" + score)
                         if (bestScorevalue < score) {
                             bestScorevalue = score
-                            bestScore.setText("Best Score: " + score)
+                            bestScore.setText("Best Score: $score")
+                            saveBestScore(score)
                         }
-                        builder.setPositiveButton("Start Again", DialogInterface.OnClickListener { dialogInterface, i ->
+                        builder.setPositiveButton("Start Again", { dialogInterface, i ->
                             init()
                         })
 
-                        requireActivity().runOnUiThread(Runnable {
+                        requireActivity().runOnUiThread({
                             builder.show()
+                            startButton.visibility = View.VISIBLE
                         })
                     } else {
                         var canvas: Canvas? = null
@@ -230,8 +270,8 @@ class freeFragment :Fragment()  {
                                 )
 
                                 for (i in 1 until snakePointsList.size) {
-                                    var getTempPositionX = snakePointsList[i].getPositionX()
-                                    var getTempPositionY = snakePointsList[i].getPositionY()
+                                    val getTempPositionX = snakePointsList[i].getPositionX()
+                                    val getTempPositionY = snakePointsList[i].getPositionY()
 
                                     snakePointsList[i].setPositionX(headPositionX)
                                     snakePointsList[i].setPositionY(headPositionY)
@@ -258,7 +298,7 @@ class freeFragment :Fragment()  {
 
         private fun growSnake() {
             if (this@freeFragment.isAdded && this@freeFragment.isVisible) {
-                var snakePoints = SnakePoints(0, 0)
+                val snakePoints = SnakePoints(0, 0)
                 (snakePointsList as ArrayList).add(snakePoints)
 
                 score += 1
