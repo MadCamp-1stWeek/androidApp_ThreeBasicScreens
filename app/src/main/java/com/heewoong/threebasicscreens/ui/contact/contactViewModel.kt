@@ -89,8 +89,8 @@ class contactViewModel : ViewModel() {
         cursor?.close()
         return contacts
     }
-    fun contactAdd(application:Application, name:String, tel:String, image:Uri? = null) {
-        Thread {
+    fun contactAdd(application:Application, name:String, tel:String, image:Uri? =  null) {
+//        Thread{
             val list = ArrayList<ContentProviderOperation>()
             try {
                 list.add(
@@ -143,11 +143,11 @@ class contactViewModel : ViewModel() {
             } catch (e: OperationApplicationException) {
                 e.printStackTrace()
             }
-        }.start()
+//        }.start()
     }
 //
 fun contactDelete(application: Application, name: String?, tel: String?) {
-    Thread {
+//    Thread {
         val cursor = application.contentResolver.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
             null,
@@ -177,6 +177,6 @@ fun contactDelete(application: Application, name: String?, tel: String?) {
             }
             close()
         }
-    }.start()
+//    }.start()
 }
 }

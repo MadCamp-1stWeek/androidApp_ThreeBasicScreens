@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.contact.contactFragment"
-    android:layout_gravity="center_horizontal">
+    android:layout_gravity="center_horizontal"
+    android:id="@+id/contact_fragment">
 
     <TextView
         android:id="@+id/contact_title"

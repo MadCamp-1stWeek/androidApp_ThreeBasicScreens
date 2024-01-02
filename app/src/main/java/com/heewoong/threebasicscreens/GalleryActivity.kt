@@ -95,6 +95,12 @@ class GalleryActivity : AppCompatActivity() {
 //                    intent.putExtra("Done", "Yes")
 //                    setResult(Activity.RESULT_OK, intent)
                     sendBroadcast(intent)
+
+                    val intent2 = Intent("statusSend")
+                    intent2.putExtra("STATUS", "Selected")
+                    sendBroadcast(intent2)
+
+
                     finish()
                 }
                 else{
@@ -110,6 +116,7 @@ class GalleryActivity : AppCompatActivity() {
 
                     }
                     isActionBarHidden = !isActionBarHidden
+
 
                 }
             }
