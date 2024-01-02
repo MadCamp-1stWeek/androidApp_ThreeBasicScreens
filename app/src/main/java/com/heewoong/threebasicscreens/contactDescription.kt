@@ -34,6 +34,7 @@ class contactDescription : AppCompatActivity() {
         val imageIn = findViewById<ImageView>(R.id.imageIn)
         val getImage =intent.getStringExtra("image")
         val imageIn_uri = Uri.parse(getImage)
+        Log.d("OlD", "$imageIn_uri")
         imageIn.setImageURI(imageIn_uri)
 
         val nameIn = findViewById<TextView>(R.id.nameIn)
@@ -59,6 +60,8 @@ class contactDescription : AppCompatActivity() {
             val intent = Intent(this, contactEdit::class.java)
             intent.putExtra("oldName", getName)
             intent.putExtra("oldPhone", getTel)
+            Log.d("OlD", "$imageIn_uri")
+            intent.putExtra("oldImage_Uri", getImage)
             startActivityForResult(intent,99)
 //            if (status == "Edited") {
 //                // 뒤로가기 버튼을 누른 것과 같은 행동 수행

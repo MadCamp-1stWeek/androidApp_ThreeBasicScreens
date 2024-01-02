@@ -30,15 +30,25 @@ class contactEdit : AppCompatActivity() {
 
         val contactViewModel: contactViewModel by viewModels()
 
-        var name: String = ""
-        var tel: String = ""
+
         val oldName = intent.getStringExtra("oldName")
         val oldTel= intent.getStringExtra("oldPhone")
+        var name = oldName.toString()
+        var tel = oldTel.toString()
+
+        val getOldImage_Uri = intent.getStringExtra("oldImage_Uri")
+        Log.d("old", "$getOldImage_Uri")
 
         val newName = findViewById<TextView>(R.id.nameNew)
         val newTel = findViewById<TextView>(R.id.telNew)
         val editConfBtn = findViewById<Button>(R.id.editConfirm)
         val imageBtn = findViewById<ImageView>(R.id.imageEdit)
+        newName.setText(name)
+        newTel.setText(tel)
+
+        val oldImage_Uri = Uri.parse(getOldImage_Uri)
+        Log.d("old", "$oldImage_Uri")
+        imageBtn.setImageURI(oldImage_Uri)
 
         fun hideKeyboard() {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -69,21 +79,12 @@ class contactEdit : AppCompatActivity() {
         val intentFilter = IntentFilter("imageSend")
         registerReceiver(imageReceiver, intentFilter)
 
-        editConfBtn.isEnabled = false
 
-        fun checkFieldsForEmptyValues() {
-            if (name.isNotEmpty() && tel.isNotEmpty()) {
-                editConfBtn.isEnabled = true
-            } else {
-                editConfBtn.isEnabled = false
-            }
-        }
 
         newName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                name = s.toString()  // 사용자가 입력한 값을 name 변수에 저장
-                checkFieldsForEmptyValues()
+                name = s.toString()
             }
             override fun afterTextChanged(p0: Editable?) {}
         })
@@ -92,7 +93,6 @@ class contactEdit : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 tel = s.toString()  // 사용자가 입력한 값을 tel 변수에 저장
-                checkFieldsForEmptyValues()
             }
             override fun afterTextChanged(p0: Editable?) {}
         })
