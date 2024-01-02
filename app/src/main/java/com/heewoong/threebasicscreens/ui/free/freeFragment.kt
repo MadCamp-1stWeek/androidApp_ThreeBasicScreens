@@ -257,14 +257,16 @@ class freeFragment :Fragment()  {
         }
 
         private fun growSnake() {
-            var snakePoints = SnakePoints(0, 0)
-            (snakePointsList as ArrayList).add(snakePoints)
+            if (this@freeFragment.isAdded && this@freeFragment.isVisible) {
+                var snakePoints = SnakePoints(0, 0)
+                (snakePointsList as ArrayList).add(snakePoints)
 
-            score += 1
+                score += 1
 
-            requireActivity().runOnUiThread(Runnable {
-                currentScore.setText(score.toString())
-            })
+                requireActivity().runOnUiThread {
+                    currentScore.text = score.toString()
+                }
+            }
         }
 
         private fun checkGameOver(headPositionX: Int, headPositionY: Int): Boolean {
