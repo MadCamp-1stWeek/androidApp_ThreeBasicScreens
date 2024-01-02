@@ -3,7 +3,10 @@ package com.heewoong.threebasicscreens.ui.photo
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.Application
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -19,6 +22,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -39,6 +43,7 @@ class photoFragment(contactFlag:Boolean=false) :Fragment() {
     private lateinit var galleryViewModel: photoViewModel
     private lateinit var cameraButton: TextView
     var contactFlag =contactFlag
+    var status: String? = "Not Done"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +51,22 @@ class photoFragment(contactFlag:Boolean=false) :Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_photo, container, false)
 
+
         imageRecycler = view.findViewById(R.id.image_recycler)
+
+        val statusReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == "statusSend") {
+                    status = intent.getStringExtra("STATUS")
+                    Log.d("STAT", "$status")
+                    // 이미지 버튼 설정 등을 여기에 추가할 수 있습니다.
+                }
+            }
+        }
+
+        val statusFilter = IntentFilter("statusSend")
+        requireContext().registerReceiver(statusReceiver, statusFilter)
+
 
         // Storage Permission
         if (ContextCompat.checkSelfPermission(
@@ -105,6 +125,11 @@ class photoFragment(contactFlag:Boolean=false) :Fragment() {
 
         // Load images whenever the fragment is resumed
         galleryViewModel.loadImages(requireContext().applicationContext as Application)
+
+        if (status == "Selected") {
+            // 뒤로가기 버튼을 누른 것과 같은 행동 수행
+            requireActivity().supportFragmentManager.popBackStack()
+        }
     }
 
     fun saveImageToStorage(data: Intent?) {

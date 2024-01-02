@@ -1,10 +1,13 @@
 package com.heewoong.threebasicscreens.ui.contact
 
+import android.app.Activity
 import android.app.Application
 import android.content.ContentProviderOperation
+import android.content.Context
 import android.content.Intent
 import android.content.OperationApplicationException
 import android.content.pm.PackageManager
+import android.database.ContentObserver
 import android.os.Bundle
 import android.os.RemoteException
 import android.provider.ContactsContract
@@ -18,8 +21,10 @@ import com.heewoong.threebasicscreens.databinding.FragmentContactBinding
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -39,6 +44,14 @@ class contactFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var editSearch: EditText
 
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        Log.d("RequestCoode", "$requestCode")
+//        if (requestCode == 500 && resultCode == Activity.RESULT_OK) {
+//            // 데이터를 추출하고 변경된 연락처 목록을 다시 로드
+//            viewModel.updateContactList(requireContext().applicationContext as Application)
+//        }
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,10 +66,23 @@ class contactFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(contactViewModel::class.java)
 
+         fun hideKeyboard() {
+            val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(requireView().windowToken, 0)
+        }
+
+        val constraintLayout = root.findViewById<ConstraintLayout>(R.id.contact_fragment)
+        constraintLayout.setOnTouchListener { _, _ ->
+            hideKeyboard()
+            false // 터치 이벤트가 소비되지 않았음을 나타냄
+        }
+
+
+
         fab?.setOnClickListener {
             val intent = Intent(requireContext(), contactAdd::class.java)
-            requireContext().startActivity(intent)
-//            viewModel.contactAdd(requireContext().applicationContext as Application)
+//            requireActivity().startActivityForResult(intent, 500)
+            requireActivity().startActivity(intent)
         }
 
         recyclerView = root.findViewById(R.id.contact_recycler)
@@ -83,10 +109,14 @@ class contactFragment : Fragment() {
 
         return root
     }
+
     override fun onResume() {
         super.onResume()
         viewModel.updateContactList(requireContext().applicationContext as Application)
     }
+
+
+
     private fun checkAndRequestPermissions() {
         val readContactsPermission = android.Manifest.permission.READ_CONTACTS
         val writeContactsPermission = android.Manifest.permission.WRITE_CONTACTS

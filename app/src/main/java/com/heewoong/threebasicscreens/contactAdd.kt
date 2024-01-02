@@ -1,5 +1,6 @@
 package com.heewoong.threebasicscreens
 
+import android.app.Activity
 import android.app.Application
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -13,11 +14,15 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContentProviderCompat.requireContext
+import com.google.android.material.internal.ViewUtils.hideKeyboard
 import com.heewoong.threebasicscreens.ui.contact.contactViewModel
 import com.heewoong.threebasicscreens.ui.photo.photoFragment
 import org.json.JSONArray
@@ -54,6 +59,18 @@ class contactAdd : AppCompatActivity() {
         val telAdd = findViewById<TextView>(R.id.telAdd)
         val addBtn = findViewById<Button>(R.id.add)
         val imageBtn = findViewById<ImageView>(R.id.imageAdd)
+
+        fun hideKeyboard() {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        }
+
+        val constraintLayout = findViewById<ConstraintLayout>(R.id.contact_add)
+        constraintLayout.setOnTouchListener { _, _ ->
+            hideKeyboard()
+            false // 터치 이벤트가 소비되지 않았음을 나타냄
+        }
+
 
         class ImageReceiver : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
@@ -138,7 +155,11 @@ class contactAdd : AppCompatActivity() {
 
 
         addBtn.setOnClickListener {
-            Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_LONG).show()
+
+//            val resultIntent = Intent()
+//            resultIntent.putExtra("result_key", 500) // 결과로 전달할 데이터 추가
+
+
             if (imageUri != null) {
                 // 이미지 URI가 있을 경우에만 contactViewModel.contactAdd 함수 호출
 //                Log.d("showME", "$fileInfo")
@@ -146,6 +167,7 @@ class contactAdd : AppCompatActivity() {
 //                Log.d("showME", "$fileInfo")
                 Log.d("showME", "$imageUri")
                 contactViewModel.contactAdd(application, name, tel, Uri.parse(imageUri))
+//                setResult(Activity.RESULT_OK, resultIntent)
 //                val imageFile = uriToFile(application, Uri.parse(imageUri))
 //                fun saveImageToContact(application: Application, name: String, tel: String, imageUri: Uri) {
 //
@@ -157,8 +179,11 @@ class contactAdd : AppCompatActivity() {
                 // 이미지 URI가 없는 경우의 처리 (예: 경고 메시지 출력)
                 Toast.makeText(this, "이미지가 선택되지 않았습니다.", Toast.LENGTH_LONG).show()
                 contactViewModel.contactAdd(application, name, tel)
+//                setResult(Activity.RESULT_OK, resultIntent)
             }
+            Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_LONG).show()
             finish()
+
 
 //            val json = assets.open("contacts_info.json").reader().readText()
 //            val contacts = JSONObject(json).getJSONArray("contacts")
