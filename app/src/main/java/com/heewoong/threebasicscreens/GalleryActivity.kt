@@ -80,16 +80,23 @@ class GalleryActivity : AppCompatActivity() {
                 isActionBarHidden = !isActionBarHidden
 
                 if (contactFlag==true){
-                    Toast.makeText(this@GalleryActivity, "저장되었습니다.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@GalleryActivity, "사진이 선택되었습니다.", Toast.LENGTH_LONG).show()
                     val intent = Intent("imageSend")
                     intent.putExtra("imageUri", "file://$path")
                     intent.putExtra("fileInfo", "$path")
 //                    intent.putExtra("Done", "Yes")
 //                    setResult(Activity.RESULT_OK, intent)
                     sendBroadcast(intent)
+
+                    val intent2 = Intent("statusSend")
+                    intent2.putExtra("STATUS", "Selected")
+                    sendBroadcast(intent2)
+
+
                     finish()
                 }
                 else{
+
 
                 }
             }
