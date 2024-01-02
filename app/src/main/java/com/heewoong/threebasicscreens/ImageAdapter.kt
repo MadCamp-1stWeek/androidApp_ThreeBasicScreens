@@ -1,5 +1,6 @@
 package com.heewoong.threebasicscreens
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -7,14 +8,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import java.io.File
 
 class ImageAdapter(
     private var context: Context,
-    private var images: List<Image>
+    private var images: List<Image>, contactFlag:Boolean
     ) : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
+
+    var contactFlag =contactFlag
 
     class ImageViewHolder(View : View) : RecyclerView.ViewHolder(View) {
 
@@ -57,6 +61,10 @@ class ImageAdapter(
         }
         holder.img?.setOnClickListener {
             val intent= Intent(context, GalleryActivity::class.java)
+//            if (context is Activity) {
+//                (context as Activity).startActivityForResult(intent, 300)
+//            }
+            intent.putExtra("contactFlag", contactFlag)
             intent.putExtra("position", position)
             intent.putExtra("paths", images.map { it.imageSrc }.toTypedArray())
             intent.putExtra("names", images.map { it.imageName }.toTypedArray())

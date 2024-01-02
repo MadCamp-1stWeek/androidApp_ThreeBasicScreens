@@ -2,12 +2,12 @@ package com.heewoong.threebasicscreens.ui.contact
 
 
 import android.app.Application
-import android.content.ContentProviderOperation
-import android.content.OperationApplicationException
+import android.content.*
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.RemoteException
 import android.provider.ContactsContract
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
@@ -19,6 +19,7 @@ import com.heewoong.threebasicscreens.contact
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import androidx.lifecycle.AndroidViewModel
+import java.io.InputStream
 
 
 class contactViewModel : ViewModel() {
@@ -51,6 +52,7 @@ class contactViewModel : ViewModel() {
     }
 
     private fun getContacts(application:Application, sort: String?, searchName: String?): List<contact> {
+//        Log.d("SHOW","${ContactsContract.CommonDataKinds.Phone.PHOTO_URI}")
         val contacts = mutableListOf<contact>()
         val projections = arrayOf(
             ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
@@ -87,7 +89,7 @@ class contactViewModel : ViewModel() {
         cursor?.close()
         return contacts
     }
-    fun contactAdd(application:Application, name:String, tel:String) {
+    fun contactAdd(application:Application, name:String, tel:String, image:Uri? = null) {
         Thread {
             val list = ArrayList<ContentProviderOperation>()
             try {
@@ -120,6 +122,20 @@ class contactViewModel : ViewModel() {
 //                        .withValue(ContactsContract.CommonDataKinds.Email.TYPE, ContactsContract.CommonDataKinds.Email.TYPE_WORK) // 이메일타입(Type_Work : 직장)
 //                        .build()
 //                )
+                // 이미지 추가
+                image?.let { uri ->
+                    val inputStream: InputStream? = application.contentResolver.openInputStream(uri)
+                    inputStream?.use { stream ->
+                        val imageBytes: ByteArray = stream.readBytes()
+
+                        val photoRow = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                            .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                            .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE)
+                            .withValue(ContactsContract.CommonDataKinds.Photo.PHOTO, imageBytes)
+                            .build()
+                        list.add(photoRow)
+                    }
+                }
                 application.contentResolver.applyBatch(ContactsContract.AUTHORITY, list) // 주소록 추가
                 list.clear() // 리스트 초기화
             } catch (e: RemoteException) {
@@ -129,5 +145,38 @@ class contactViewModel : ViewModel() {
             }
         }.start()
     }
+//
+fun contactDelete(application: Application, name: String?, tel: String?) {
+    Thread {
+        val cursor = application.contentResolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            null,
+            "${ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME} = ? AND ${ContactsContract.CommonDataKinds.Phone.NUMBER} = ?",
+            arrayOf(name, tel),
+            null
+        )
+        cursor?.apply {
+            val displayNameIndex = getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+            val numberIndex = getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+            val contactIdIndex = getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)
+            val rawContactIdIndex = getColumnIndex(ContactsContract.CommonDataKinds.Phone.RAW_CONTACT_ID)
 
+            while (moveToNext()) {
+                if (displayNameIndex != -1 && numberIndex != -1 && contactIdIndex != -1 && rawContactIdIndex != -1) {
+                    val contactId = getString(contactIdIndex)
+                    val rawContactId = getString(rawContactIdIndex)
+
+                    val deleteUri = Uri.withAppendedPath(
+                        ContactsContract.RawContacts.CONTENT_URI,
+                        rawContactId
+                    )
+                    application.contentResolver.delete(deleteUri, null, null)
+                } else {
+                    Log.e("ContactDelete", "Some columns do not exist")
+                }
+            }
+            close()
+        }
+    }.start()
+}
 }

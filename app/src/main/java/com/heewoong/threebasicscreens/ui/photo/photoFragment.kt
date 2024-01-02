@@ -34,10 +34,11 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class photoFragment :Fragment() {
+class photoFragment(contactFlag:Boolean=false) :Fragment() {
     private var imageRecycler: RecyclerView? = null
     private lateinit var galleryViewModel: photoViewModel
     private lateinit var cameraButton: TextView
+    var contactFlag =contactFlag
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,7 +67,7 @@ class photoFragment :Fragment() {
         // Observe changes in the image list
         galleryViewModel.images.observe(viewLifecycleOwner, Observer { images ->
             imageRecycler?.layoutManager = GridLayoutManager(requireContext(), 3)
-            imageRecycler?.adapter = ImageAdapter(requireContext(), images)
+            imageRecycler?.adapter = ImageAdapter(requireContext(), images, contactFlag)
         })
 
         galleryViewModel.loadImages(requireContext().applicationContext as Application)
@@ -92,6 +93,12 @@ class photoFragment :Fragment() {
         if (requestCode == 102 && resultCode == RESULT_OK) {
             saveImageToStorage(data)
         }
+//        if (requestCode == 300 && resultCode == Activity.RESULT_OK) {
+//            val result = data?.getStringExtra("Done")
+//            if (result == "Yes") {
+//                fragmentManager?.beginTransaction()?.remove(this)?.commit()
+//            }
+//        }
     }
     override fun onResume() {
         super.onResume()
