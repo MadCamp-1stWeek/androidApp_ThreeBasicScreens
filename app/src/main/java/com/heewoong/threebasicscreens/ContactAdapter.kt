@@ -3,6 +3,7 @@ package com.heewoong.threebasicscreens
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,14 +22,18 @@ class ContactAdapter(
 ) : RecyclerView.Adapter<ContactAdapter.ImageViewHolder>() {
 
      class ImageViewHolder(view : View) : RecyclerView.ViewHolder(view) {
-
         val profile = itemView.findViewById<ImageView>(R.id.image)
         val name_info = itemView.findViewById<TextView>(R.id.name)
         val memo_info = itemView.findViewById<TextView>(R.id.tel)
-
+         val score = itemView.findViewById<TextView>(R.id.score)
 
 
         fun bindView(contact: contact, context: Context) {
+
+            val sharedPreferences = context.getSharedPreferences("best",Context.MODE_PRIVATE)
+            //Log.d("ffffff", "${sharedPreferences.getInt("best_score",0)}")
+
+
             val outContact = itemView.findViewById<LinearLayout>(R.id.outContact)
             outContact.setOnClickListener{
 //                Toast.makeText(context, "aaa", Toast.LENGTH_LONG).show();
@@ -38,9 +43,16 @@ class ContactAdapter(
                 intent.putExtra("phone", contact.phone)
                 startActivity(context,intent,null)
             }
+
             profile.setImageURI(contact.image)
             name_info.setText(contact.name)
             memo_info.setText(contact.phone)
+            if (contact.name=="my"){
+                score.setText(sharedPreferences.getInt("best_score", 0).toString())
+            }
+            else{
+            }
+//            score.setText(contact.score)
         }
     }
 

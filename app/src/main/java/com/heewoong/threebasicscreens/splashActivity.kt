@@ -19,19 +19,15 @@ class splashActivity : AppCompatActivity() {
 
         madCamp = findViewById(R.id.madCamp)
          fun moveToFront() {
-            val animatorZ: ValueAnimator = ObjectAnimator.ofFloat(madCamp, "translationZ", 100f, 500f)
 
-            animatorZ.duration = 1000
-            animatorZ.start()
+             val scaleXAnimator: ValueAnimator = ObjectAnimator.ofFloat(madCamp, "scaleX", 1f, 4f)
+             scaleXAnimator.duration = 3000
 
-             val animatorX: ValueAnimator = ObjectAnimator.ofFloat(madCamp, "translationX", 0f, 200f)
-             animatorX.duration = 1000
-
-             val animatorY: ValueAnimator = ObjectAnimator.ofFloat(madCamp, "translationY", 0f, 200f)
-             animatorY.duration = 1000
+             val scaleYAnimator: ValueAnimator = ObjectAnimator.ofFloat(madCamp, "scaleY", 1f, 4f)
+             scaleYAnimator.duration = 3000
 
              val animatorSet = AnimatorSet()
-             animatorSet.playTogether(animatorZ, animatorX, animatorY)
+             animatorSet.playTogether( scaleXAnimator, scaleYAnimator)
              animatorSet.start()
         }
         moveToFront()

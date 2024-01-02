@@ -118,11 +118,11 @@ class contactEdit : AppCompatActivity() {
                 contactViewModel.contactDelete(application, oldName,oldTel)
                 contactViewModel.contactAdd(application, name, tel, Uri.parse(imageUri))}
             else{
-                Toast.makeText(this, "이미지가 선택되지 않았습니다.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "이미지가 선택되지 않았습니다.", Toast.LENGTH_SHORT).show()
                 contactViewModel.contactDelete(application, oldName,oldTel)
                 contactViewModel.contactAdd(application, name,tel)
             }
-            Toast.makeText(this, "수정 되었습니다.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "수정 되었습니다.", Toast.LENGTH_SHORT).show()
             finish()
         }
     }

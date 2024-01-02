@@ -80,7 +80,7 @@ class GalleryActivity : AppCompatActivity() {
                 isActionBarHidden = !isActionBarHidden
 
                 if (contactFlag==true){
-                    Toast.makeText(this@GalleryActivity, "사진이 선택되었습니다.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@GalleryActivity, "사진이 선택되었습니다.", Toast.LENGTH_SHORT).show()
                     val intent = Intent("imageSend")
                     intent.putExtra("imageUri", "file://$path")
                     intent.putExtra("fileInfo", "$path")
@@ -116,13 +116,13 @@ class GalleryActivity : AppCompatActivity() {
                             if (imageToDelete.exists()) {
                                 if (imageToDelete.delete()) {
 
-                                    Toast.makeText(this@GalleryActivity, "Image deleted", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this@GalleryActivity, "이미지가 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
 
                                     // Optionally, you can refresh the gallery or update the imagePaths list
                                     // and load the next image
                                     finish()
                                 } else {
-                                    Toast.makeText(this@GalleryActivity, "Failed to delete image", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this@GalleryActivity, "이미지를 삭제하는데 실패 했습니다.", Toast.LENGTH_SHORT).show()
                                 }
                             }
                         }
