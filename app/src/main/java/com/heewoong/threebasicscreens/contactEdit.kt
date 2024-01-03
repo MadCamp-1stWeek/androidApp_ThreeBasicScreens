@@ -65,6 +65,45 @@ class contactEdit : AppCompatActivity() {
             false // 터치 이벤트가 소비되지 않았음을 나타냄
         }
 
+        fun formatPhoneNumber(phone: String): String {
+            val formattedPhone = StringBuilder()
+            if (phone.startsWith("02")) {
+                if (phone.length >= 2) {
+                    formattedPhone.append(phone.substring(0, 2))
+                    if (phone.length >= 3) {
+                        formattedPhone.append("-")
+                        if (phone.length>=6){
+                            formattedPhone.append(phone.substring(2, 6))
+                            formattedPhone.append("-")
+                            formattedPhone.append(phone.substring(6))
+                        }
+                        else  {
+                            formattedPhone.append(phone.substring(2, phone.length))
+                        }
+                    }
+                }
+            } else if (phone.startsWith("010")) {
+                if (phone.length >= 3) {
+                    formattedPhone.append(phone.substring(0, 3))
+                    if (phone.length >= 4) {
+                        formattedPhone.append("-")
+                        if (phone.length>=7){
+                            formattedPhone.append(phone.substring(3, 7))
+                            formattedPhone.append("-")
+                            formattedPhone.append(phone.substring(7))
+                        }
+                        else  {
+                            formattedPhone.append(phone.substring(3, phone.length))
+                        }
+                    }
+                }
+            } else {
+                // 다른 형식의 전화번호는 그대로 반환
+                return phone
+            }
+            return formattedPhone.toString()
+        }
+
         class ImageReceiver : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 if (intent?.action == "imageSend") {
@@ -97,6 +136,8 @@ class contactEdit : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 tel = s.toString()  // 사용자가 입력한 값을 tel 변수에 저장
+                val formattedPhoneNumber = formatPhoneNumber(newTel.text.toString())
+                tel = formattedPhoneNumber
             }
             override fun afterTextChanged(p0: Editable?) {}
         })
