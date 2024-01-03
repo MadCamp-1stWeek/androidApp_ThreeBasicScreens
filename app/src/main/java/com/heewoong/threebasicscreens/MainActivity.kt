@@ -1,5 +1,6 @@
 package com.heewoong.threebasicscreens
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -35,5 +36,6 @@ class MainActivity : AppCompatActivity() {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
     }
 }
