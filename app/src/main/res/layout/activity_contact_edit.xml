@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".contactEdit"
-    android:background="@color/background_color"
+    android:background="@color/white"
     android:id="@+id/contact_Edit">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#70000000">
         <androidx.cardview.widget.CardView
 
             android:layout_width="match_parent"
