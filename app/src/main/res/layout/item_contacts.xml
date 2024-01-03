@@ -50,8 +50,6 @@
             android:layout_height="wrap_content"
             android:textSize="15dp"
             android:textColor="@color/gray"/>
-
-
     </LinearLayout>
 
         <TextView
