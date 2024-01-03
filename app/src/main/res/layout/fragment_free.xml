@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.free.freeFragment"
-    android:layout_gravity="center_horizontal"
-    android:background="@color/black">
+    android:layout_gravity="center_horizontal">
 
     <TextView
         android:id="@+id/game_title"
@@ -17,7 +16,7 @@
         android:text="SNAKE GAME"
         android:textSize="25dp"
         android:textStyle="bold"
-        android:textColor="@color/purple_700"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -30,8 +29,7 @@
         app:layout_constraintTop_toBottomOf="@+id/game_title"
         android:text="Best Score: 0"
         android:gravity="center"
-        android:textSize="20sp"
-        android:textColor="@color/white"/>
+        android:textSize="20sp" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -44,7 +42,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/purple_700"
+            android:background="@android:color/holo_red_light"
             android:padding="4dp"
             android:layout_margin="20dp">
             <SurfaceView
@@ -56,9 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Start Game"
-                android:layout_centerInParent="true"
-                android:backgroundTint="@color/black"
-                android:textColor="@color/purple_700"/>
+                android:layout_centerInParent="true"/>
             <TextView
                 android:id="@+id/current_score"
                 android:layout_width="wrap_content"

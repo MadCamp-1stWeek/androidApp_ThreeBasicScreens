@@ -7,8 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.contact.contactFragment"
     android:layout_gravity="center_horizontal"
-    android:id="@+id/contact_fragment"
-    android:background="@color/background_color">
+    android:id="@+id/contact_fragment">
 
     <TextView
         android:id="@+id/contact_title"
