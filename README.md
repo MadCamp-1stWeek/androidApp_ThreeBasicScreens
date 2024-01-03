@@ -42,8 +42,10 @@ ______
 
 ### 3.2 탭 1: 연락처
 #### 3.2.1 연락처 목록
-목록 사진
-_______
+<p align = "center">
+  <img src="https://github.com/MadCamp-1stWeek/androidApp_ThreeBasicScreens/assets/112631065/dbf23166-d340-4b3d-abff-3d3aab5e5af1"  width="300"/>
+</p>
+
 
 ##### 3.2.1.1 주요 기능
 - 핸드폰의 연락처와 연동되어 확인, 수정, 삭제가 모두 가능합니다다
@@ -60,8 +62,9 @@ _______
 _________
 
 #### 3.2.2 연락처 상세 페이지
-컨택트 내부 사진
-_____________
+<p align = "center">
+  <img src="https://github.com/MadCamp-1stWeek/androidApp_ThreeBasicScreens/assets/112631065/a5d8c336-dd96-4813-b069-204256826371"  width="300"/>
+</p>
 
 ##### 3.2.2.1 주요 기능
 - 이름과 전화번호, 프로필 사진을 확인할 수 있습니다
@@ -76,8 +79,10 @@ _____________
 ________________
 
 #### 3.2.3 연락처 수정 페이지
-연락처 수정 페이지 사진
-______________
+<p align = "center">
+  <img src="https://github.com/MadCamp-1stWeek/androidApp_ThreeBasicScreens/assets/112631065/14b03f07-1280-406d-8ae2-812fe8aa9b05"  width="300"/>
+</p>
+
 
 ##### 3.2.3.1 주요 기능
 - 프로필 사진을 눌러 갤러리의 새로운 사진 또는 카메라로 새로 찍은 사진으로 변경할 수 있습니다
@@ -91,8 +96,9 @@ ______________
 __________
 
 #### 3.2.4 연락처 추가 페이지
-연락처 추가 페이지 사진
-________________
+<p align = "center">
+  <img src="https://github.com/MadCamp-1stWeek/androidApp_ThreeBasicScreens/assets/112631065/23fc71e9-532f-4990-bf3f-d2af15ba000e"  width="300"/>
+</p>
 
 ##### 3.2.4.1 주요 기능
 - 프로필 사진을 눌러 갤러리의 사진 또는 카메라로 새로 찍은 사진을 선택할 수 있습니다
@@ -108,8 +114,9 @@ ___________________
 ### 3.3 탭 2: 갤러리
 
 #### 3.3.1. 갤러리
-목록 사진
-_________
+<p align = "center">
+  <img src="https://github.com/MadCamp-1stWeek/androidApp_ThreeBasicScreens/assets/112631065/5d0e988f-0008-47c2-9277-d903230ae5c2"  width="300"/>
+</p>
 
 ##### 3.3.1.1 주요 기능
 - 휴대폰의 갤러리와 연동되어 추가, 삭제, 편집이 모두 가능합니다
@@ -129,8 +136,10 @@ _________
 - 각 이미지 홀더에 클릭 리스너를 설정해 새로운 intent로 넘어갈 수 있도록 하였습니다
 
 #### 3.3.2 이미지 상세 페이지
-이미지 내부 사진
-_____________
+<p align = "center">
+  <img src="https://github.com/MadCamp-1stWeek/androidApp_ThreeBasicScreens/assets/112631065/f4ce1156-642d-4622-a2c0-d0977674cf20"  width="300"/>
+  <img src="https://github.com/MadCamp-1stWeek/androidApp_ThreeBasicScreens/assets/112631065/b375ca6c-672f-478b-8ebd-92dfbcebe65f"  width="300"/>
+</p>
 
 ##### 3.3.2.1 주요 기능
 - 확대된 이미지와 이미지의 이름을 확인할 수 있습니다
@@ -151,8 +160,10 @@ _____________
 ### 3.4 탭 3: SNAKE GAME
 
 #### 3.4.1. SNAKE GAME
-목록 사진
-_________
+<p align = "center">
+  <img src="https://github.com/MadCamp-1stWeek/androidApp_ThreeBasicScreens/assets/112631065/852aed3d-0a16-4f40-8232-8c5eb0f2a015"  width="300"/>
+</p>
+
 
 ##### 3.4.1.1 주요 기능
 - Start game 버튼을 눌러 Snake game을 할 수 있습니다
