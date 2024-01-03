@@ -107,13 +107,9 @@ class GalleryActivity : AppCompatActivity() {
                     if (isActionBarHidden) {
                         imageName.visibility = View.VISIBLE
                         imageNav.visibility = View.VISIBLE
-                        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-
                     } else {
                         imageName.visibility = View.GONE
                         imageNav.visibility = View.GONE
-                        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-
                     }
                     isActionBarHidden = !isActionBarHidden
 

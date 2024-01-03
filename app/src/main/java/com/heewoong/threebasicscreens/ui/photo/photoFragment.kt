@@ -1,5 +1,6 @@
 package com.heewoong.threebasicscreens.ui.photo
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.Application
@@ -19,6 +20,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -43,8 +46,10 @@ class photoFragment(contactFlag:Boolean=false) :Fragment() {
     private lateinit var galleryViewModel: photoViewModel
     private lateinit var cameraButton: TextView
     var contactFlag =contactFlag
+    var filter = false
     var status: String? = "Not Done"
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -93,7 +98,7 @@ class photoFragment(contactFlag:Boolean=false) :Fragment() {
             imageRecycler?.adapter = ImageAdapter(requireContext(), images, contactFlag)
         })
 
-        galleryViewModel.loadImages(requireContext().applicationContext as Application)
+        galleryViewModel.loadImages(requireContext().applicationContext as Application, filter)
 
         cameraButton = view.findViewById(R.id.Camera)
 
@@ -104,6 +109,19 @@ class photoFragment(contactFlag:Boolean=false) :Fragment() {
 
             val cameraInt = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             startActivityForResult(cameraInt, 102)
+        }
+
+        val favoriteFilterButton: LinearLayout = view.findViewById(R.id.filterFavorite)
+        val favoriteFilterHeart: ImageView = view.findViewById(R.id.filterFavoriteHeart)
+        favoriteFilterButton.setOnClickListener {
+            // Toggle the favorite filter state and reload the images
+            if (!filter) {
+                favoriteFilterHeart.setBackgroundResource(R.drawable.heart_full)
+            } else {
+                favoriteFilterHeart.setBackgroundResource(R.drawable.heart_empty)
+            }
+            filter = !filter
+            galleryViewModel.loadImages(requireContext().applicationContext as Application, filter)
         }
 
         return view
@@ -125,7 +143,7 @@ class photoFragment(contactFlag:Boolean=false) :Fragment() {
         super.onResume()
 
         // Load images whenever the fragment is resumed
-        galleryViewModel.loadImages(requireContext().applicationContext as Application)
+        galleryViewModel.loadImages(requireContext().applicationContext as Application, filter)
 
         if (status == "Selected") {
             // 뒤로가기 버튼을 누른 것과 같은 행동 수행
