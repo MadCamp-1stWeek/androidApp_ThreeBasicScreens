@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".contactEdit"
-    android:background="@color/white"
+    android:background="@color/background_color"
     android:id="@+id/contact_Edit">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -83,7 +83,7 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:backgroundTint="@color/white"
-            android:textColor="@color/purple_700"
+            android:textColor="@color/purple_900"
             />
 
 
