@@ -48,7 +48,14 @@ class contactViewModel : ViewModel() {
 
     fun updateContactList(application: Application) {
         val searchedList = getContacts(application, _sortText.value, _searchText.value)
-        _contactList.value = searchedList
+        val myContact = searchedList.filter{ it.phone=="010-1234-0184"}
+        val otherContacts = searchedList.filter{it.phone!="010-1234-0184"}
+
+        val searchedMyContacts = mutableListOf<contact>()
+        searchedMyContacts.addAll(myContact)
+        searchedMyContacts.addAll(otherContacts)
+
+        _contactList.value = searchedMyContacts
     }
 
     private fun getContacts(application:Application, sort: String?, searchName: String?): List<contact> {

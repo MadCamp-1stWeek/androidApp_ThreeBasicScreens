@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
@@ -57,6 +58,7 @@ class contactAdd : AppCompatActivity() {
 
         val nameAdd = findViewById<TextView>(R.id.nameAdd)
         val telAdd = findViewById<TextView>(R.id.telAdd)
+        telAdd.inputType = InputType.TYPE_CLASS_PHONE
         val addBtn = findViewById<Button>(R.id.add)
         val imageBtn = findViewById<ImageView>(R.id.imageAdd)
 
@@ -69,6 +71,45 @@ class contactAdd : AppCompatActivity() {
         constraintLayout.setOnTouchListener { _, _ ->
             hideKeyboard()
             false // 터치 이벤트가 소비되지 않았음을 나타냄
+        }
+
+        fun formatPhoneNumber(phone: String): String {
+            val formattedPhone = StringBuilder()
+            if (phone.startsWith("02")) {
+                if (phone.length >= 2) {
+                    formattedPhone.append(phone.substring(0, 2))
+                    if (phone.length >= 3) {
+                        formattedPhone.append("-")
+                        if (phone.length>=6){
+                            formattedPhone.append(phone.substring(2, 6))
+                            formattedPhone.append("-")
+                            formattedPhone.append(phone.substring(6))
+                        }
+                        else  {
+                            formattedPhone.append(phone.substring(2, phone.length))
+                        }
+                    }
+                }
+            } else if (phone.startsWith("010")) {
+                if (phone.length >= 3) {
+                    formattedPhone.append(phone.substring(0, 3))
+                    if (phone.length >= 4) {
+                        formattedPhone.append("-")
+                        if (phone.length>=7){
+                            formattedPhone.append(phone.substring(3, 7))
+                            formattedPhone.append("-")
+                            formattedPhone.append(phone.substring(7))
+                        }
+                        else  {
+                            formattedPhone.append(phone.substring(3, phone.length))
+                        }
+                    }
+                }
+            } else {
+                // 다른 형식의 전화번호는 그대로 반환
+                return phone
+            }
+            return formattedPhone.toString()
         }
 
 
@@ -114,7 +155,8 @@ class contactAdd : AppCompatActivity() {
         telAdd.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                tel = telAdd.text.toString()
+                val formattedPhoneNumber = formatPhoneNumber(telAdd.text.toString())
+                tel = formattedPhoneNumber
                 checkFieldsForEmptyValues()
             }
 

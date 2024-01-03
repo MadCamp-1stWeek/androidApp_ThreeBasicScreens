@@ -2,10 +2,8 @@ package com.heewoong.threebasicscreens.ui.free
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.PorterDuff
+import android.content.Intent
+import android.graphics.*
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,12 +12,16 @@ import android.view.SurfaceView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.heewoong.threebasicscreens.OnSwipeTouchListener_game
 import com.heewoong.threebasicscreens.R
 import com.heewoong.threebasicscreens.SnakePoints
+import com.heewoong.threebasicscreens.ui.photo.photoFragment
+import kotlinx.android.synthetic.main.fragment_free.*
+import java.io.ByteArrayOutputStream
 import java.util.Random
 import java.util.Timer
 import java.util.TimerTask
@@ -58,11 +60,18 @@ class freeFragment :Fragment()  {
     ): View {
 
         val view = inflater.inflate(R.layout.fragment_free, container, false)
-
         surfaceView = view.findViewById(R.id.surfaceView)
         currentScore = view.findViewById(R.id.current_score)
         bestScore = view.findViewById(R.id.best_score)
         startButton = view.findViewById(R.id.startButton)
+
+
+
+//        screenShotBtn.setOnClickListener{
+//            screenShot(view)
+//        }
+
+
 
         surfaceHolder = surfaceView.holder
 
@@ -114,6 +123,8 @@ class freeFragment :Fragment()  {
     }
 
     inner class SurfaceCallback : SurfaceHolder.Callback {
+        private lateinit var offScreenBitmap: Bitmap
+        private lateinit var offScreenCanvas: Canvas
         @SuppressLint("SetTextI18n")
         override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
             // Surface의 상태가 변경되었을 때 호출되는 메서드
@@ -148,6 +159,11 @@ class freeFragment :Fragment()  {
         }
         @SuppressLint("SetTextI18n")
         private fun init() {
+
+            colorArray = arrayListOf(Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN)
+
+            offScreenBitmap = Bitmap.createBitmap(surfaceView.width, surfaceView.height, Bitmap.Config.ARGB_8888)
+            offScreenCanvas = Canvas(offScreenBitmap)
 
             startButton.visibility = View.GONE
             bestScorevalue = getBestScore()
@@ -237,6 +253,7 @@ class freeFragment :Fragment()  {
 
                     //Check for crash
                     if(checkGameOver(headPositionX, headPositionY)) {
+
                         timer.purge()
                         timer.cancel()
 
@@ -248,6 +265,15 @@ class freeFragment :Fragment()  {
                             bestScore.setText("Best Score: $score")
                             saveBestScore(score)
                         }
+                        builder.setNegativeButton("Take Screenshot", { dialogInterface, i ->
+                            // 여기에 screenshot 함수 호출하는 로직을 추가하세요
+                            requireActivity().runOnUiThread({
+                                startButton.visibility = View.INVISIBLE
+                            })
+                            screenShot(requireView(), headPositionX, headPositionY)
+//                            init()
+                            startButton.visibility = View.VISIBLE
+                        })
                         builder.setPositiveButton("Start Again", { dialogInterface, i ->
                             init()
                         })
@@ -334,7 +360,7 @@ class freeFragment :Fragment()  {
                 snakePointsList.get(0).getPositionX() >= surfaceView.width ||
                 snakePointsList.get(0).getPositionY() >= surfaceView.height) {
                 gameOver = true
-                colorArray = arrayListOf(Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN)
+//                colorArray = arrayListOf(Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN)
             } else {
                 for (i in 0 until snakePointsList.size) {
                     if (headPositionX == snakePointsList.get(i).getPositionX() &&
@@ -375,6 +401,77 @@ class freeFragment :Fragment()  {
             paint.isAntiAlias = true
 
             return paint
+        }
+        private fun drawGame(x:Int, y:Int) {
+            // 기존 코드 유지
+            offScreenCanvas.drawCircle(
+                x.toFloat(),
+                y.toFloat(),
+                pointSize.toFloat(),
+                createPointColor(0)
+            )
+            for (i in 1 until snakePointsList.size) {
+                offScreenCanvas.drawCircle(
+                snakePointsList[i].getPositionX().toFloat(),
+                snakePointsList[i].getPositionY().toFloat(),
+                pointSize.toFloat(),
+                createPointColor(i)
+                )
+            }
+
+            offScreenCanvas.drawCircle(
+                positionX.toFloat(),
+                positionY.toFloat(),
+                pointSize.toFloat(),
+                pointColor!!
+            )
+
+            val textPaint = Paint()
+            textPaint.color = Color.GREEN
+            textPaint.textSize = 60f // 텍스트 크기 조정
+
+            val text = "GAME OVER"
+            val textWidth = textPaint.measureText(text)
+            val xPosition = (offScreenCanvas.width - textWidth) / 2 // 중앙으로 위치 조정
+            val yPosition = offScreenCanvas.height - 50f // 하단에 위치하도록 조정
+
+            offScreenCanvas.drawText(text, xPosition, yPosition, textPaint)
+        }
+
+        fun screenShot(view: View, x:Int, y:Int){
+            view.isDrawingCacheEnabled = true
+            val bitmap = Bitmap.createBitmap(view.drawingCache)
+            view.isDrawingCacheEnabled = false
+            val stream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            val byteArray = stream.toByteArray()
+            drawGame(x,y)
+
+            val fragment = photoFragment()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.add(R.id.fragment_container, fragment, "photoFragment")
+            transaction.addToBackStack(null)
+            transaction.commit()
+            requireActivity().supportFragmentManager.executePendingTransactions()
+
+            fragment.saveImageToStorage(mergeBitmaps(bitmap,offScreenBitmap))
+        }
+        fun mergeBitmaps(gameBitmap: Bitmap, screenshotBitmap: Bitmap): Bitmap {
+            // 합쳐진 비트맵의 크기 설정 (여기서는 gameBitmap의 크기로 설정)
+            val mergedBitmap = Bitmap.createBitmap(gameBitmap.width, gameBitmap.height, gameBitmap.config)
+
+            val canvas = Canvas(mergedBitmap)
+            val paint = Paint(Paint.FILTER_BITMAP_FLAG)
+
+            // 게임 비트맵 그리기 (좌측 상단에 배치)
+            canvas.drawBitmap(gameBitmap, 0f, 0f, paint)
+
+            // 스크린샷 비트맵 그리기 (원하는 위치에 배치)
+            val offsetX = 160 // 합칠 때 x 좌표를 조정할 값
+            val offsetY = 500 // 합칠 때 y 좌표를 조정할 값
+            canvas.drawBitmap(screenshotBitmap, offsetX.toFloat(), offsetY.toFloat(), paint)
+
+            return mergedBitmap
         }
     }
 }
