@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ImageView
@@ -28,6 +29,9 @@ class contactEdit : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact_edit)
 
+        supportActionBar?.hide()
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+
         val contactViewModel: contactViewModel by viewModels()
 
 
@@ -41,7 +45,7 @@ class contactEdit : AppCompatActivity() {
 
         val newName = findViewById<TextView>(R.id.nameNew)
         val newTel = findViewById<TextView>(R.id.telNew)
-        val editConfBtn = findViewById<Button>(R.id.editConfirm)
+        val editConfBtn = findViewById<TextView>(R.id.editConfirm)
         val imageBtn = findViewById<ImageView>(R.id.imageEdit)
         newName.setText(name)
         newTel.setText(tel)

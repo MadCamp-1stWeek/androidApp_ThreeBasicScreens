@@ -20,7 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
-        app:cardCornerRadius="30dp">
+        app:cardCornerRadius="30dp"
+        app:cardElevation="0dp">
 
         <ImageView
             android:id="@+id/image"
@@ -50,8 +51,6 @@
             android:layout_height="wrap_content"
             android:textSize="15dp"
             android:textColor="@color/gray"/>
-
-
     </LinearLayout>
 
         <TextView

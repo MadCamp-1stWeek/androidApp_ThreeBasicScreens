@@ -19,7 +19,7 @@
             app:cardCornerRadius= "40dp"
             android:layout_gravity="center"
             android:clipToPadding="false"
-            android:layout_marginVertical="70dp"
+            android:layout_marginVertical="100dp"
             android:layout_marginHorizontal="40dp"
             app:cardBackgroundColor="@color/white"
             app:cardElevation="30dp">
@@ -33,24 +33,29 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="75dp"
                     android:layout_gravity="center_horizontal"
-                    android:layout_margin="15dp">
+                    android:layout_margin="15dp"
+                    app:cardElevation="0dp">
                     <ImageView
                         android:id="@+id/imageAdd"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_baseline_add"
+                        android:src="@drawable/profile"
                         />
                 </androidx.cardview.widget.CardView>
                 <EditText
                     android:id="@+id/nameAdd"
-                    android:layout_width="150dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="60dp"
                     android:hint="이름"
                     android:layout_marginTop="20dp"
                     android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:layout_gravity="center">
+                    android:textColorHint="@color/gray"
+                    android:textSize="30dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:backgroundTint="@color/background_color">
                 </EditText>
 
 
@@ -59,20 +64,26 @@
                     android:layout_width="150dp"
                     android:layout_height="60dp"
                     android:hint="전화번호"
+                    android:textColorHint="@color/gray"
+                    android:textSize="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center"
                     android:textColor="@color/gray"
+                    android:gravity="center"
+                    android:backgroundTint="@color/background_color"
                     >
                 </EditText>
 
-                <Button
+                <TextView
                     android:id="@+id/add"
                     android:layout_width="100dp"
-                    android:layout_height="70dp"
-                    android:text="저장"
+                    android:layout_height="80dp"
+                    android:text="완료"
                     android:textSize="20dp"
-                    android:gravity="center_horizontal"
-                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/white"
+                    android:textColor="@color/purple_900"
                     />
             </LinearLayout>
         </androidx.cardview.widget.CardView>

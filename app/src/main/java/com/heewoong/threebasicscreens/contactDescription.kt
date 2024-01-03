@@ -9,8 +9,10 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -24,6 +26,8 @@ class contactDescription : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+
         setContentView(R.layout.activity_contact_description)
 
 
@@ -45,10 +49,10 @@ class contactDescription : AppCompatActivity() {
         val getTel = intent.getStringExtra("phone")
         telIn.setText(getTel)
 
-        val delBtn = findViewById<Button>(R.id.del)
-        val editBtn = findViewById<Button>(R.id.edit)
-        val callBtn = findViewById<Button>(R.id.call)
-        val textBtn = findViewById<Button>(R.id.text)
+        val delBtn = findViewById<LinearLayout>(R.id.del)
+        val editBtn = findViewById<LinearLayout>(R.id.edit)
+        val callBtn = findViewById<LinearLayout>(R.id.call)
+        val textBtn = findViewById<LinearLayout>(R.id.text)
 
         delBtn.setOnClickListener{
             Toast.makeText(this, "삭제 되었습니다.", Toast.LENGTH_SHORT).show()

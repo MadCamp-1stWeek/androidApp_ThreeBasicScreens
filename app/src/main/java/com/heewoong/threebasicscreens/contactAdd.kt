@@ -18,6 +18,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -39,6 +40,9 @@ class contactAdd : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact_add)
 
+        supportActionBar?.hide()
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+
         val contactViewModel: contactViewModel by viewModels()
 
 
@@ -58,8 +62,10 @@ class contactAdd : AppCompatActivity() {
 
         val nameAdd = findViewById<TextView>(R.id.nameAdd)
         val telAdd = findViewById<TextView>(R.id.telAdd)
+
         telAdd.inputType = InputType.TYPE_CLASS_PHONE
-        val addBtn = findViewById<Button>(R.id.add)
+        val addBtn = findViewById<TextView>(R.id.add)
+
         val imageBtn = findViewById<ImageView>(R.id.imageAdd)
 
         fun hideKeyboard() {

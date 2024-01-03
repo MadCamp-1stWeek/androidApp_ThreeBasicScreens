@@ -1,55 +1,62 @@
     package com.heewoong.threebasicscreens.ui.photo
 
-    import android.app.Activity
-    import android.app.Activity.RESULT_OK
-    import android.app.Application
-    import android.content.BroadcastReceiver
-    import android.content.Context
-    import android.content.Intent
-    import android.content.IntentFilter
-    import android.content.pm.PackageManager
-    import android.graphics.Bitmap
-    import android.graphics.drawable.BitmapDrawable
-    import android.media.MediaScannerConnection
-    import android.net.Uri
-    import android.os.Bundle
-    import android.os.Environment
-    import android.provider.MediaStore
-    import android.util.Log
-    import android.view.LayoutInflater
-    import android.view.View
-    import android.view.ViewGroup
-    import android.widget.TextView
-    import androidx.core.app.ActivityCompat
-    import androidx.core.content.ContextCompat
-    import androidx.core.content.ContextCompat.registerReceiver
-    import androidx.fragment.app.Fragment
-    import androidx.lifecycle.Observer
-    import androidx.lifecycle.ViewModelProvider
-    import androidx.recyclerview.widget.GridLayoutManager
-    import androidx.recyclerview.widget.RecyclerView
-    import com.heewoong.threebasicscreens.ImageAdapter
-    import com.heewoong.threebasicscreens.R
-    import com.heewoong.threebasicscreens.databinding.FragmentPhotoBinding
-    import java.io.File
-    import java.io.FileOutputStream
-    import java.io.OutputStream
-    import java.text.SimpleDateFormat
-    import java.util.Date
-    import java.util.Locale
 
-    class photoFragment(contactFlag:Boolean=false) :Fragment() {
-        private var imageRecycler: RecyclerView? = null
-        private lateinit var galleryViewModel: photoViewModel
-        private lateinit var cameraButton: TextView
-        var contactFlag =contactFlag
-        var status: String? = "Not Done"
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.Activity.RESULT_OK
+import android.app.Application
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.PorterDuff
+import android.graphics.drawable.BitmapDrawable
+import android.media.MediaScannerConnection
+import android.net.Uri
+import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.registerReceiver
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.heewoong.threebasicscreens.ImageAdapter
+import com.heewoong.threebasicscreens.R
+import com.heewoong.threebasicscreens.databinding.FragmentPhotoBinding
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-        override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View? {
-            val view = inflater.inflate(R.layout.fragment_photo, container, false)
+class photoFragment(contactFlag:Boolean=false) :Fragment() {
+    private var imageRecycler: RecyclerView? = null
+    private lateinit var galleryViewModel: photoViewModel
+    private lateinit var cameraButton: TextView
+    var contactFlag =contactFlag
+    var filter = false
+    var status: String? = "Not Done"
+
+    @SuppressLint("MissingInflatedId")
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_photo, container, false)
 
 
             imageRecycler = view.findViewById(R.id.image_recycler)
@@ -93,7 +100,7 @@
                 imageRecycler?.adapter = ImageAdapter(requireContext(), images, contactFlag)
             })
 
-            galleryViewModel.loadImages(requireContext().applicationContext as Application)
+            galleryViewModel.loadImages(requireContext().applicationContext as Application, filter)
 
             cameraButton = view.findViewById(R.id.Camera)
 
@@ -105,7 +112,19 @@
                 val cameraInt = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 startActivityForResult(cameraInt, 102)
             }
-
+        val favoriteFilterButton: LinearLayout = view.findViewById(R.id.filterFavorite)
+        val favoriteFilterHeart: ImageView = view.findViewById(R.id.filterFavoriteHeart)
+        favoriteFilterButton.setOnClickListener {
+            // Toggle the favorite filter state and reload the images
+            if (!filter) {
+                favoriteFilterHeart.setBackgroundResource(R.drawable.heart_full)
+            } else {
+                favoriteFilterHeart.setBackgroundResource(R.drawable.heart_empty)
+                favoriteFilterHeart.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
+            }
+            filter = !filter
+            galleryViewModel.loadImages(requireContext().applicationContext as Application, filter)
+        }
             return view
         }
 
@@ -125,7 +144,7 @@
             super.onResume()
 
             // Load images whenever the fragment is resumed
-            galleryViewModel.loadImages(requireContext().applicationContext as Application)
+            galleryViewModel.loadImages(requireContext().applicationContext as Application, filter)
 
             if (status == "Selected") {
                 // 뒤로가기 버튼을 누른 것과 같은 행동 수행
@@ -133,12 +152,7 @@
             }
         }
 
-        private fun saveBestUri( best_Uri: Uri) {
-            val sharedPreferences = requireContext().getSharedPreferences("best_Uri", Context.MODE_PRIVATE)
-            val editor = sharedPreferences.edit()
-            editor.putString("best_Uri", best_Uri.toString())
-            editor.apply()
-        }
+
         fun saveImageToStorage(data: Any?) {
             val externalStorageState = Environment.getExternalStorageState()
             if (externalStorageState == Environment.MEDIA_MOUNTED) {
@@ -193,4 +207,6 @@
             )
         }
 
+
     }
+
