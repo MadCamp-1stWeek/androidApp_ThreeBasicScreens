@@ -83,7 +83,7 @@
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:backgroundTint="@color/white"
-                    android:textColor="@color/purple_700"
+                    android:textColor="@color/purple_900"
                     />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
