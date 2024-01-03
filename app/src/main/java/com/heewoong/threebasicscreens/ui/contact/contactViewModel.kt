@@ -81,7 +81,7 @@ class contactViewModel : ViewModel() {
             val imageUri = if (image != null) {
                 Uri.parse(image)
             } else {
-                Uri.parse("android.resource://" + application.packageName + "/" + R.drawable.c_1)
+                Uri.parse("android.resource://" + application.packageName + "/" + R.drawable.profile)
             }
             val contactItem = contact(name, number, imageUri)
             contacts.add(contactItem)

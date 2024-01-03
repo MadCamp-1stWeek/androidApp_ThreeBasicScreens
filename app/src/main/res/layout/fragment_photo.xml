@@ -39,7 +39,6 @@
             android:layout_marginLeft="15dp"
             app:layout_constraintStart_toStartOf="@id/Gallery_title"
             app:layout_constraintTop_toBottomOf="@id/textPhoto"
-            android:textColor="@color/black"
             android:id="@+id/filterFavorite">
             <ImageView
                 android:layout_width="20dp"
