@@ -88,7 +88,7 @@ class GalleryActivity : AppCompatActivity() {
             override fun onClick() {
                 super.onClick()
                 if (contactFlag==true){
-                    Toast.makeText(this@GalleryActivity, "Save Succeed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@GalleryActivity, "사진이 선택되었습니다.", Toast.LENGTH_SHORT).show()
                     val intent = Intent("imageSend")
                     intent.putExtra("imageUri", "file://$path")
                     intent.putExtra("fileInfo", path)
@@ -131,17 +131,18 @@ class GalleryActivity : AppCompatActivity() {
                     if (position < paths.size) {
                         val filePath = "file://" + paths[position]
 
+
                         // Check if the file exists
                         val imageToDelete = File(paths[position])
                         if (imageToDelete.exists()) {
                             if (imageToDelete.delete()) {
-                                Toast.makeText(this@GalleryActivity, "Image deleted", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@GalleryActivity, "이미지가 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
                                 database.delete(DBHelper.TABLE_NAME, "${DBHelper.COLUMN_PATH} = ?", arrayOf(paths[position]))
                                 // Optionally, you can refresh the gallery or update the imagePaths list
                                 // and load the next image
                                 finish()
                             } else {
-                                Toast.makeText(this@GalleryActivity, "Failed to delete image", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@GalleryActivity, "이미지를 삭제하는데 실패 했습니다.", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }

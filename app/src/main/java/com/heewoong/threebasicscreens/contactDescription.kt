@@ -52,7 +52,7 @@ class contactDescription : AppCompatActivity() {
         val textBtn = findViewById<LinearLayout>(R.id.text)
 
         delBtn.setOnClickListener{
-            Toast.makeText(this, "삭제 되었습니다.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "삭제 되었습니다.", Toast.LENGTH_SHORT).show()
             contactViewModel.contactDelete(application,getName,getTel)
             finish()
         }

@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -41,11 +42,13 @@ class freeFragment :Fragment()  {
 
     private val pointSize: Int = 30
     private val defaultTalePoints = 3
-    private val snakeColor = Color.MAGENTA
+    private val snakeColor = Color.GREEN
     private val snakeMovingSpeed = 800
     private var timer: Timer = Timer()
 
     private var pointColor: Paint? = null
+
+    private var colorArray: ArrayList<Int> = arrayListOf(Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
@@ -133,12 +136,12 @@ class freeFragment :Fragment()  {
             // Surface가 소멸되었을 때 호출되는 메서드
         }
         private fun getBestScore(): Int {
-            val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+            val sharedPreferences = requireActivity().getSharedPreferences("best",Context.MODE_PRIVATE)
             return sharedPreferences.getInt("best_score", 0)
         }
 
         private fun saveBestScore(score: Int) {
-            val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+            val sharedPreferences = requireActivity().getSharedPreferences("best", Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()
             editor.putInt("best_score", score)
             editor.apply()
@@ -175,6 +178,7 @@ class freeFragment :Fragment()  {
         }
 
         private fun addPoint() {
+
             val surfaceWidth = surfaceView.width - (pointSize * 2)
             val surfaceHeight = surfaceView.height - (pointSize * 2)
 
@@ -187,10 +191,13 @@ class freeFragment :Fragment()  {
 
             if ((randomYPosition % 2) != 0) {
                 randomYPosition += 1
-            }
 
+            }
+            pointColor = createFoodColor()
             positionX = (pointSize * randomXPosition) + pointSize
-            positionY = (pointSize * randomXPosition) + pointSize
+            positionY = (pointSize * randomYPosition) + pointSize
+
+
         }
 
         private fun moveSnake() {
@@ -199,6 +206,7 @@ class freeFragment :Fragment()  {
             timer.scheduleAtFixedRate(object: TimerTask() {
                 @SuppressLint("SetTextI18n")
                 override fun run() {
+
                     var headPositionX = snakePointsList.get(0).getPositionX()
                     var headPositionY = snakePointsList.get(0).getPositionY()
 
@@ -259,17 +267,18 @@ class freeFragment :Fragment()  {
                                     snakePointsList[0].getPositionX().toFloat(),
                                     snakePointsList[0].getPositionY().toFloat(),
                                     pointSize.toFloat(),
-                                    createPointColor()
+                                    createPointColor(0)
                                 )
 
                                 canvas.drawCircle(
                                     positionX.toFloat(),
                                     positionY.toFloat(),
                                     pointSize.toFloat(),
-                                    createPointColor()
+                                    pointColor!!
                                 )
 
-                                for (i in 1 until snakePointsList.size) {
+
+                                for (i in 1 until snakePointsList.size-1) {
                                     val getTempPositionX = snakePointsList[i].getPositionX()
                                     val getTempPositionY = snakePointsList[i].getPositionY()
 
@@ -279,12 +288,19 @@ class freeFragment :Fragment()  {
                                         snakePointsList[i].getPositionX().toFloat(),
                                         snakePointsList[i].getPositionY().toFloat(),
                                         pointSize.toFloat(),
-                                        createPointColor()
+                                        createPointColor(i)
                                     )
 
                                     headPositionX = getTempPositionX
                                     headPositionY = getTempPositionY
                                 }
+                                snakePointsList[snakePointsList.size-1].setPositionX(headPositionX)
+                                snakePointsList[snakePointsList.size-1].setPositionY(headPositionY)
+                                canvas.drawCircle(
+                                    snakePointsList[snakePointsList.size-1].getPositionX().toFloat(),
+                                    snakePointsList[snakePointsList.size-1].getPositionY().toFloat(),
+                                    pointSize.toFloat(),
+                                    createPointColor(snakePointsList.size-1))
                             }
                         } finally {
                             if (canvas != null) {
@@ -292,6 +308,7 @@ class freeFragment :Fragment()  {
                             }
                         }
                     }
+
                 }
             }, (1000 - snakeMovingSpeed).toLong(), (1000 - snakeMovingSpeed).toLong())
         }
@@ -313,32 +330,51 @@ class freeFragment :Fragment()  {
             var gameOver = false
 
             if (snakePointsList.get(0).getPositionX() < 0 ||
-                    snakePointsList.get(0).getPositionY() < 0 ||
-                    snakePointsList.get(0).getPositionX() >= surfaceView.width ||
-                    snakePointsList.get(0).getPositionY() >= surfaceView.height) {
+                snakePointsList.get(0).getPositionY() < 0 ||
+                snakePointsList.get(0).getPositionX() >= surfaceView.width ||
+                snakePointsList.get(0).getPositionY() >= surfaceView.height) {
                 gameOver = true
+                colorArray = arrayListOf(Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN)
             } else {
                 for (i in 0 until snakePointsList.size) {
                     if (headPositionX == snakePointsList.get(i).getPositionX() &&
-                            headPositionY == snakePointsList.get(i).getPositionY()) {
+                        headPositionY == snakePointsList.get(i).getPositionY()) {
                         gameOver = true
                         break
                     }
                 }
             }
+
             return gameOver
         }
 
-        private fun createPointColor(): Paint {
+        private fun createPointColor(i: Int): Paint {
 
-            if (pointColor == null){
-                pointColor = Paint()
-                pointColor!!.setColor(snakeColor)
-                pointColor!!.isAntiAlias = true
-            }
+            val snakePaint = Paint()
+            snakePaint.color = colorArray[i]
+            snakePaint.isAntiAlias = true
 
-            return pointColor!!
+            return snakePaint
 
+
+        }
+        private fun createFoodColor(): Paint {
+            // 랜덤한 음식의 색상을 생성
+            val random = Random()
+            val r = random.nextInt(256)
+            val g = random.nextInt(256)
+            val b = random.nextInt(256)
+
+            val randomColor = Color.rgb(r, g, b)
+
+            val paint = Paint()
+            paint.color = randomColor
+//            Log.d("color", "$randomColor")
+            colorArray.add(randomColor)
+//            Log.d("color", "$randomColor")
+            paint.isAntiAlias = true
+
+            return paint
         }
     }
 }

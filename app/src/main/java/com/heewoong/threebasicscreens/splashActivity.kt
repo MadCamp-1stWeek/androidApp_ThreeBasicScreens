@@ -8,33 +8,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.widget.ImageView
+import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.activity_splash.*
 
 class splashActivity : AppCompatActivity() {
-    private lateinit var madCamp: ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
+        Glide.with(this).load(R.raw.snap).into(snap)
 
 
-        madCamp = findViewById(R.id.madCamp)
-         fun moveToFront() {
-            val animatorZ: ValueAnimator = ObjectAnimator.ofFloat(madCamp, "translationZ", 100f, 500f)
 
-            animatorZ.duration = 1000
-            animatorZ.start()
 
-             val animatorX: ValueAnimator = ObjectAnimator.ofFloat(madCamp, "translationX", 0f, 200f)
-             animatorX.duration = 1000
-
-             val animatorY: ValueAnimator = ObjectAnimator.ofFloat(madCamp, "translationY", 0f, 200f)
-             animatorY.duration = 1000
-
-             val animatorSet = AnimatorSet()
-             animatorSet.playTogether(animatorZ, animatorX, animatorY)
-             animatorSet.start()
-        }
-        moveToFront()
 
 
         Handler().postDelayed({

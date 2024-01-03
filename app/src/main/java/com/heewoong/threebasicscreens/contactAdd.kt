@@ -177,11 +177,11 @@ class contactAdd : AppCompatActivity() {
 //                saveImageToContact(application, name, tel, Uri.fromFile(imageFile))
             } else {
                 // 이미지 URI가 없는 경우의 처리 (예: 경고 메시지 출력)
-                Toast.makeText(this, "이미지가 선택되지 않았습니다.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "이미지가 선택되지 않았습니다.", Toast.LENGTH_SHORT).show()
                 contactViewModel.contactAdd(application, name, tel)
 //                setResult(Activity.RESULT_OK, resultIntent)
             }
-            Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "저장 되었습니다.", Toast.LENGTH_SHORT).show()
             finish()
 
 
