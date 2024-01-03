@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
 import android.media.MediaScannerConnection
 import android.net.Uri
@@ -119,6 +120,7 @@ class photoFragment(contactFlag:Boolean=false) :Fragment() {
                 favoriteFilterHeart.setBackgroundResource(R.drawable.heart_full)
             } else {
                 favoriteFilterHeart.setBackgroundResource(R.drawable.heart_empty)
+                favoriteFilterHeart.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
             }
             filter = !filter
             galleryViewModel.loadImages(requireContext().applicationContext as Application, filter)

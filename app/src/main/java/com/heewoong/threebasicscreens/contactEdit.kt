@@ -41,7 +41,7 @@ class contactEdit : AppCompatActivity() {
 
         val newName = findViewById<TextView>(R.id.nameNew)
         val newTel = findViewById<TextView>(R.id.telNew)
-        val editConfBtn = findViewById<Button>(R.id.editConfirm)
+        val editConfBtn = findViewById<TextView>(R.id.editConfirm)
         val imageBtn = findViewById<ImageView>(R.id.imageEdit)
         newName.setText(name)
         newTel.setText(tel)
